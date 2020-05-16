@@ -1,0 +1,10 @@
+{'AppID':'wxa27a096a91cf750c',
+'AppSecret':'86a2e1e435f1cd9a6b67404db7b9d545'}
+
+{'log_id': 1530232382637256355,
+ 'words_result_num': 1, 
+ 'formula_result': [{'location': {'width': 356, 'top': 13, 'left': 26, 'height': 82}, 
+ 'words': '\\frac { d Q _ { B C } } { d \\varphi } = g _ { c } \\cdot \\frac { d X _ { n U } } { d \\varphi } \\cdot H _ { p } \\cdot n _ { u } \\cdot g _ { p } f  '}], 
+ 'words_result': [{'location': {'width': 356, 'top': 13, 'left': 26, 'height': 82}, 
+    'words': '\\frac { d Q _ { B C } } { d \\varphi } = g _ { c } \\cdot \\frac { d X _ { n U } } { d \\varphi } \\cdot H _ { p } \\cdot n _ { u } \\cdot g _ { p } f '}], 
+    'formula_result_num': 1}
