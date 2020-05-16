@@ -1,6 +1,7 @@
 import re
 import BaiduTrans
 from tkinter import *
+import pyperclip
 
 raw='''
 可以避免安装大量阳极牺牲物，并可减少航行阻力/which can avoid the installation of a large number of anode sacrifices and can reduce the navigation resistance
@@ -48,6 +49,7 @@ def dataCalcPro(raw):
         # reTrans=BaiduTrans.BaiduTrans(zh)
         # print(f"-{zh}\n  {reTrans}\n  {en}\n\n")
         # CalcResult+=f"-{zh}\n  {reTrans}\n  {en}\n\n"
+    pyperclip.copy(zhSentence)
     reTrans = BaiduTrans.BaiduTrans(zhSentence)
     CalcResult += f"-{zhSentence}\n  {reTrans}\n\n  {enSentence}\n\n"
     return CalcResult
