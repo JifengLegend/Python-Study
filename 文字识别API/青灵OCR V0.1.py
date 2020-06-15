@@ -150,8 +150,9 @@ def mathpix():
         'src': image_code,
         'formats': ['latex_simplified']
     },default_headers)
-    print(r['latex_simplified'])
-    textShow.write(r['latex_simplified'])
+    mathPure=re.sub(' ','',r['latex_simplified'])
+    print(mathPure)
+    textShow.write(mathPure)
 def copyAll():
     textShow.copyAll()
 
