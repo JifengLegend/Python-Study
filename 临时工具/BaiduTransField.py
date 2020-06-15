@@ -11,7 +11,8 @@ def BaiduTrans(source):
     secretKey = 'pZCsP6EUTkXG0lLwOYAS'  # 填写你的密钥
 
     httpClient = None
-    myurl = '/api/trans/vip/translate/fieldtranslate'
+    # myurl = '/api/trans/vip/translate/fieldtranslate'
+    myurl ='/api/trans/vip/fieldtranslate'
 
     fromLang = 'zh'   #原文语种
     toLang = 'en'   #译文语种
@@ -31,7 +32,7 @@ def BaiduTrans(source):
         response = httpClient.getresponse()
         result_all = response.read().decode("utf-8")
         result = json.loads(result_all)
-
+        print(result)
         # print (result['trans_result'][0]["dst"])
 
     except Exception as e:
