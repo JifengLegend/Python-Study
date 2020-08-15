@@ -27,8 +27,3 @@ if __name__ == "__main__":
 
     # pyautogui.scroll(10)
 
-    a=pyautogui.locateCenterOnScreen(r"C:\Users\Administrator\Desktop\python 学习\其它\pyautogui 学习\1.png")
-    if a==None:
-        print('not found')
-    else:
-        pyautogui.click(a[0],a[1])
