@@ -33,8 +33,9 @@ def sortAndMove(fileList):
     for each in fileList:
         fullPath=os.path.join(newFolder,each)
         shutil.move(each,fullPath)
-# def filterFile(fileList):
-#     return bool(x) for x in selMode
+def printList(list):
+    for each in range(len(list)):
+        print(f'{each+1}:{list[each]}')
 if __name__ == "__main__":    
     fileList=os.listdir()
 
@@ -42,17 +43,10 @@ if __name__ == "__main__":
         print(f"{each+1}:{fileList[each]}")
 
     keyWords=input("请输入关键字，使用[]分隔：").split("[]")
-    selMode=selectFile(fileList,keyWords)
+    selMode=selectFile(fileList,*keyWords)
     print(selMode)
-    for each in selMode:
-        # print(bool(each))
-        pass
-    # print(list(bool(i) for i in selMode))
-    # print(filter(filterFile,fileList))
     fileListNew= list(compress(fileList,selMode))
-    print(fileListNew)
+    printList(fileListNew)
     sortAndMove(fileListNew)
 
-    # for each in fileListNew:
-    #     realName=getRealName(each,'【后续完整课程必加微信：kaoyan800，完整课程福利更新QQ群：651077908】')
-    #     os.rename(each,realName)
+
