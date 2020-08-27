@@ -5,21 +5,30 @@ class Data:
         self.xlimit=xlimit
         self.ylimit=ylimit
         self.xstep=xstep
-        self.points=[]
+        self.points=[] # 存储所有的点
         for eachpoint in source:
            self.points.append( Point(eachpoint[0],eachpoint[1]))
         self.startCalc()
 
 
     def startCalc(self):
+        # 开始计算，包含计算当前，上升推算，添加新的点
         while self.points[0].x>=self.xlimit:
             self.calcFcns()
             self.getUpPoint()
             self.addNewPoint()
+        y=self.xlimit*self.fcns[0].k+ self.fcns[0].b
+        self.newPoint=Point(self.xlimit,y)
+        del self.points[0]        
+        self.addNewPoint()
         while self.points[-1].y>=self.ylimit:
             self.calcFcns()
             self.getDownPoint()
             self.addNewPoint(1)
+        x=(self.ylimit-self.fcns[-1].b)/self.fcns[-1].k
+        self.newPoint=Point(x,self.ylimit)
+        del self.points[-1]          
+        self.addNewPoint(1)
 
     def printPoints(self):
         self.xx=[i.x for i in self.points]
@@ -91,8 +100,8 @@ def dataPre(sources):
     return plist    
 def printWork(database):
     xx,yy=database.printPoints()
-    print(xx,yy)
-    plt.plot(xx,yy,'b-')
+    print(xx,"\n",yy,"\n\n")
+    plt.plot(xx,yy,'r-')
 
 if __name__ == "__main__":
     sources50='''26.684371, 1.5220760
