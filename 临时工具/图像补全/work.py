@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import xlwt
 
 class Data:
     def __init__(self,source,xstep=2,xlimit=0,ylimit=0):
@@ -98,11 +99,16 @@ def dataPre(sources):
         p=(float(cache[0]),float(cache[1]))
         plist.append(p)
     return plist    
-def printWork(database):
+def printWork(sheet,database):
     xx,yy=database.printPoints()
+    writeList(sheet,0,xx)
+    writeList(sheet,1,yy)
     print(xx,"\n",yy,"\n\n")
     plt.plot(xx,yy,'r-')
 
+def writeList(sheet,adress,list):
+    for num in range(len(list)):
+        sheet.write(num,adress,list[num])
 if __name__ == "__main__":
     sources50='''26.684371, 1.5220760
 28.275614, 1.5187379
@@ -194,26 +200,35 @@ if __name__ == "__main__":
     # xx,yy=database01.printPoints()
     # database01.calcFcns()
 
+    myfile=xlwt.Workbook()
+    mysheet=myfile.add_sheet('50')
+
     database50=Data(dataPre(sources50),xlimit=10,ylimit=1)
-    printWork(database50)
+    printWork(mysheet,database50)
 
+    mysheet=myfile.add_sheet('60')    
     database60=Data(dataPre(sources60),xlimit=10,ylimit=1)
-    printWork(database60)
+    printWork(mysheet,database60)
 
+    mysheet=myfile.add_sheet('70')
     database70=Data(dataPre(sources70),xlimit=10,ylimit=1)
-    printWork(database70)
+    printWork(mysheet,database70)
 
+    mysheet=myfile.add_sheet('80')
     database80=Data(dataPre(sources80),xlimit=10,ylimit=1)
-    printWork(database80)
+    printWork(mysheet,database80)
 
+    mysheet=myfile.add_sheet('90')
     database90=Data(dataPre(sources90),xlimit=10,ylimit=1)
-    printWork(database90)
+    printWork(mysheet,database90)
 
+    mysheet=myfile.add_sheet('100')
     database100=Data(dataPre(sources100),xlimit=10,ylimit=1)
-    printWork(database100)
+    printWork(mysheet,database100)
 
+    mysheet=myfile.add_sheet('106')
     database106=Data(dataPre(sources106),xlimit=10,ylimit=1)
-    printWork(database106)
-    
+    printWork(mysheet,database106)
+    myfile.save('dataBase.xls')
     plt.axis([10,110,1,5])
     plt.show()
