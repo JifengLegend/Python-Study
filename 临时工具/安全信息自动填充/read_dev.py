@@ -3,6 +3,7 @@ import xlwt
 import os
 from os import path
 import random
+from xlutils.copy import copy
 
 def addSheet(wb01):
     s01=wb01.add_sheet('张宝中')
@@ -18,12 +19,18 @@ def writeTem(sheet,n):
     for i in range(3):
         sheet.write(n,i+1,tem())
 
-def writeInfo(sheet,n,d00,d01):
+def writeInfo(sheet,n,index):
     sheet.write(n,4,'全天' if random.randint(0,10)>5 else '上午')
     sheet.write(n,5,'否')
     sheet.write(n,6,'无')
-    sheet.write(n,7,getPlace(d00))
-    sheet.write(n,8,getWord(d01))
+    if index==0:
+        data0=d00
+        data1=d01
+    elif index==1:
+        data0=d10
+        data1=d11
+    sheet.write(n,7,getPlace(data0))
+    sheet.write(n,8,getWord(data1))
 
 def getWord(data):
     dlen=random.randint(1,4)
@@ -52,45 +59,26 @@ def pinRow(sheet):
     for num in range(rows):
         if sheet.cell(num,6).value=='':
             return num
-        
 if __name__ == "__main__":
     realPath=path.abspath('.')
     os.chdir(path.join(realPath,'临时工具\安全信息自动填充'))
-    wb01=xlwt.Workbook()
-    # addSheet(wb01)
-    ss1=wb01.add_sheet('张宝中')
-    ss2=wb01.add_sheet('张晋豪')
-    
 
-    d00=['文化1A','远航二区204','中心食堂','心海餐厅','第四餐厅']
-    d01=['张晋豪','张川','钟振宇','王关杰','李文正','杨国涛']
-
-    d10=['文化1A','远航二区204','中心食堂','心海餐厅','第四餐厅']
-    d11=['张宝中','张川','张方实','王关杰','李文正']
-
-    # for i in range(10):
-
-    #     writeTem(ss1,i)
-    #     writeInfo(ss1,i,d00,d01)
-
-    #     writeTem(ss2,i)
-    #     writeInfo(ss2,i,d10,d11)
-    
+    # 带格式的读取整个表格
+    rb=xlrd.open_workbook('workBook.xls',formatting_info=True)
+    rbS=rb.sheet_names()
+    rb01=rb.sheet_by_index(0)
+    xflist=rb.xf_list
+    print(xflist)
+    cell01=rb01.cell_xf_index(4,3)
+    cell02=rb01.cell_xf_index(5,0)
+    print(cell01,cell02)
 
 
 
-    # wb01.save('workBook.xls')
-    wb01=xlrd.open_workbook('workBook.xls')
-    sheetName=wb01.sheet_names()
-    for num,eachSheet in enumerate(sheetName):
-        s01=wb01.sheet_by_index(num)
-
-        # for each in range(s01.nrows):
-        #     print(s01.row_values(each))
-        print('_'*50)
-        print(pinRow(s01))
-    
-
-    
+    cellXf=xflist[cell01]
+    print(cellXf.protection.cell_locked)
+    print(cellXf.background.fill_pattern,\
+        cellXf.background.background_colour_index)
+    print(cellXf.alignment.hor_align)
 
     
