@@ -3,6 +3,7 @@ import xlwt
 import os
 from os import path
 import random
+from xlutils.copy import copy
 
 def addSheet(wb01):
     s01=wb01.add_sheet('张宝中')
@@ -16,14 +17,20 @@ def tem()->float:
     return a
 def writeTem(sheet,n):
     for i in range(3):
-        sheet.write(n,i+1,tem())
+        sheet.write(n,i+1,tem(),setStyle())
 
-def writeInfo(sheet,n,d00,d01):
-    sheet.write(n,4,'全天' if random.randint(0,10)>5 else '上午')
-    sheet.write(n,5,'否')
-    sheet.write(n,6,'无')
-    sheet.write(n,7,getPlace(d00))
-    sheet.write(n,8,getWord(d01))
+def writeInfo(sheet,n,index):
+    sheet.write(n,4,'全天' if random.randint(0,10)>5 else '上午',setStyle())
+    sheet.write(n,5,'否',setStyle())
+    sheet.write(n,6,'无',setStyle())
+    if index==0:
+        data0=d00
+        data1=d01
+    elif index==1:
+        data0=d10
+        data1=d11
+    sheet.write(n,7,getPlace(data0),setStyle())
+    sheet.write(n,8,getWord(data1),setStyle())
 
 def getWord(data):
     dlen=random.randint(1,4)
@@ -52,45 +59,51 @@ def pinRow(sheet):
     for num in range(rows):
         if sheet.cell(num,6).value=='':
             return num
-        
+def setStyle(horalign=2,veralign=2):
+    style=xlwt.XFStyle()    
+    # style.font.name=name
+    style.alignment.horz=horalign
+    style.alignment.vert=veralign
+    return style
+    
 if __name__ == "__main__":
     realPath=path.abspath('.')
     os.chdir(path.join(realPath,'临时工具\安全信息自动填充'))
-    wb01=xlwt.Workbook()
-    # addSheet(wb01)
-    ss1=wb01.add_sheet('张宝中')
-    ss2=wb01.add_sheet('张晋豪')
-    
 
+    global d00,d01,d10,d11
     d00=['文化1A','远航二区204','中心食堂','心海餐厅','第四餐厅']
     d01=['张晋豪','张川','钟振宇','王关杰','李文正','杨国涛']
 
     d10=['文化1A','远航二区204','中心食堂','心海餐厅','第四餐厅']
     d11=['张宝中','张川','张方实','王关杰','李文正']
 
-    # for i in range(10):
+    # 带格式的读取整个表格
+    rb=xlrd.open_workbook('workBook.xls',formatting_info=True)
+    rbS=rb.sheet_names()
 
-    #     writeTem(ss1,i)
-    #     writeInfo(ss1,i,d00,d01)
 
-    #     writeTem(ss2,i)
-    #     writeInfo(ss2,i,d10,d11)
+    rb01=rb.sheets()[0]
+    # 把读取的表格复制成可编辑的格式
+    wb=copy(rb)
+
+
+    # 获取可读写的sheet
+    wb01=wb.get_sheet(0)
+    # writeTem(wb01,12)
     
+    for index ,name in enumerate(rbS):
+        wbcache=wb.get_sheet(index)
+        rbcache=rb.sheet_by_index(index)
+        
+        print(pinRow(rbcache))
+        writeTem(wbcache,pinRow(rbcache)+0)
+        writeInfo(wbcache,pinRow(rbcache)+0,index)
+        xflist=rb.xf_list
+        cell01=rbcache.cell_xf_index(4,3)
+        cellXF=xflist[cell01]
 
 
 
-    # wb01.save('workBook.xls')
-    wb01=xlrd.open_workbook('workBook.xls')
-    sheetName=wb01.sheet_names()
-    for num,eachSheet in enumerate(sheetName):
-        s01=wb01.sheet_by_index(num)
-
-        # for each in range(s01.nrows):
-        #     print(s01.row_values(each))
-        print('_'*50)
-        print(pinRow(s01))
-    
-
-    
+    wb.save('workBook.xls')
 
     
