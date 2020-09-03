@@ -54,8 +54,8 @@ def pinRow(sheet):
             return num
         
 if __name__ == "__main__":
-    realPath=path.abspath('.')
-    os.chdir(path.join(realPath,'临时工具\安全信息自动填充'))
+    # realPath=path.abspath('.')
+    # os.chdir(path.join(realPath,'临时工具\安全信息自动填充'))
     wb01=xlwt.Workbook()
     # addSheet(wb01)
     ss1=wb01.add_sheet('张宝中')
