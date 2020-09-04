@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     # 带格式的读取整个表格
-    rb=xlrd.open_workbook('学硕二班_网格4组“一人一册”健康状况记录表.xls',formatting_info=True)
+    rb=xlrd.open_workbook('01.xls',formatting_info=True)
     rbS=rb.sheet_names()
 
 
@@ -111,8 +111,8 @@ if __name__ == "__main__":
 
         writeTem(wbcache,pinRow(rbcache)+0)
         writeInfo(wbcache,pinRow(rbcache)+0,index)
-        for row in range(8,43):
-            changeDate(row)
+        # for row in range(8,43):
+        #     changeDate(row)
 
 
         
