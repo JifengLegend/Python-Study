@@ -43,7 +43,7 @@ class Data:
             # self.fcns[num].plotFcn()
 
     def getUpPoint(self):
-        self.shinek=self.fcns[0].k*self.fcns[0].k/self.fcns[1].k
+        self.shinek=self.fcns[0].k*self.fcns[0].k/self.fcns[1].k*1.01
         self.shineb=self.points[0].y-self.points[0].x*self.shinek
         self.newPoint=Point(self.points[0].x-self.xstep,(self.points[0].x-self.xstep)*self.shinek+self.shineb)
         plt.plot(self.newPoint.x,self.newPoint.y)
@@ -110,7 +110,7 @@ def writeList(sheet,adress,list):
     for num in range(len(list)):
         sheet.write(num,adress,list[num])
 if __name__ == "__main__":
-    sources50='''26.684371, 1.5220760
+    sources50='''26.684371, 1.5200760
 28.275614, 1.5187379
 32.112329, 1.5087399
 37.020924, 1.4856027
@@ -126,7 +126,7 @@ if __name__ == "__main__":
 50.815205, 1.7482100
 53.218139, 1.6947793
 54.391001, 1.6453959
-55.007027, 1.6103620'''
+55.007027, 1.6003620'''
 
     sources70='''47.521810, 2.1994055
 49.923265, 2.1952915
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 102.88742, 3.5580225
 103.36013, 3.4195910
 103.45118, 3.3129985
-103.48332, 3.2175452'''
+103.49332, 3.2175452'''
 
     sources106='''96.534814, 4.4635818
 99.112812, 4.4316177
@@ -184,7 +184,7 @@ if __name__ == "__main__":
 105.62482, 4.0701222
 106.06919, 3.8998752
 106.24900, 3.7630513
-106.31952, 3.6262291'''
+106.31652, 3.6262291'''
 
     # xx=[4,5,6]
     # yy=[5.5,5,4]
