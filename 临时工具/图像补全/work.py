@@ -1,11 +1,13 @@
 import matplotlib.pyplot as plt
 import xlwt
+from dataSourse import dBAll
 
 class Data:
-    def __init__(self,source,xstep=2,xlimit=0,ylimit=0):
+    def __init__(self,source,xstep=8,ystep=0.3,xlimit=0,ylimit=0):
         self.xlimit=xlimit
         self.ylimit=ylimit
         self.xstep=xstep
+        self.ystep=ystep
         self.points=[] # 存储所有的点
         for eachpoint in source:
            self.points.append( Point(eachpoint[0],eachpoint[1]))
@@ -43,15 +45,20 @@ class Data:
             # self.fcns[num].plotFcn()
 
     def getUpPoint(self):
-        self.shinek=self.fcns[0].k*self.fcns[0].k/self.fcns[1].k*1.01
-        self.shineb=self.points[0].y-self.points[0].x*self.shinek
-        self.newPoint=Point(self.points[0].x-self.xstep,(self.points[0].x-self.xstep)*self.shinek+self.shineb)
+        try:
+            self.shinek=self.fcns[0].k*self.fcns[0].k/self.fcns[1].k
+            self.shineb=self.points[0].y-self.points[0].x*self.shinek
+            self.newPoint=Point(self.points[0].x-self.xstep,(self.points[0].x-self.xstep)*self.shinek+self.shineb)
+        except ZeroDivisionError:
+            print(f'{self.points[0]}')
+            pass
         plt.plot(self.newPoint.x,self.newPoint.y)
 
     def getDownPoint(self):
         self.shinek=self.fcns[-1].k*self.fcns[-1].k/self.fcns[-2].k
         self.shineb=self.points[-1].y-self.points[-1].x*self.shinek
-        self.newPoint=Point(self.points[-1].x+self.xstep,(self.points[-1].x+self.xstep)*self.shinek+self.shineb)
+        self.newPoint=Point((self.points[-1].y-self.ystep-self.shineb)/self.shinek,self.points[-1].y-self.ystep)
+        # self.newPoint=Point(self.points[-1].x+self.xstep,(self.points[-1].x+self.xstep)*self.shinek+self.shineb)
         plt.plot(self.newPoint.x,self.newPoint.y)
 
     def addNewPoint(self,flag=0):
@@ -99,92 +106,34 @@ def dataPre(sources):
         p=(float(cache[0]),float(cache[1]))
         plist.append(p)
     return plist    
-def printWork(sheet,database):
+def printWork(sheet,database,key):
     xx,yy=database.printPoints()
+
     writeList(sheet,0,xx)
     writeList(sheet,1,yy)
+    for num,val in enumerate(xx):
+        sheet.write(num,2,key)
     print(xx,"\n",yy,"\n\n")
-    plt.plot(xx,yy,'r-')
+    plt.plot(xx,yy,'b.')
+    r=[]
+    for num,val in enumerate(xx):
+        r.append((xx[num],yy[num],key))
+    return r
 
 def writeList(sheet,adress,list):
+    '''用于在指定sheet中写列表\n
+    sheet=目标，adress=列数，list=要写入的列表'''
     for num in range(len(list)):
         sheet.write(num,adress,list[num])
+def printAll(sheet,r):
+    for num0,val0 in enumerate(r):
+        row=num0
+        for num1,val1 in enumerate(val0):
+            sheet.write(row,num1,val1)
+
+
 if __name__ == "__main__":
-    sources50='''26.684371, 1.5200760
-28.275614, 1.5187379
-32.112329, 1.5087399
-37.020924, 1.4856027
-40.058047, 1.4555062
-42.488420, 1.4089503
-44.797824, 1.3463756
-45.557358, 1.3022745'''
-
-    sources60='''36.258619, 1.8206283
-39.450710, 1.8180601
-43.316538, 1.8090900
-47.241341, 1.7865943
-50.815205, 1.7482100
-53.218139, 1.6947793
-54.391001, 1.6453959
-55.007027, 1.6003620'''
-
-    sources70='''47.521810, 2.1994055
-49.923265, 2.1952915
-52.266271, 2.1872036
-54.843672, 2.1751253
-58.124214, 2.1526663
-61.405280, 2.1127079
-63.749621, 2.0600760
-65.391227, 2.0043024
-66.300719, 1.9485706
-67.181021, 1.8896587
-67.791005, 1.8180417'''
-
-    sources80='''61.153642, 2.6917939
-65.136680, 2.6804308
-68.885632, 2.6627177
-72.459234, 2.6330832
-75.535762, 2.5780233
-77.616684, 2.5206338
-78.966303, 2.4362415
-79.877369, 2.3280113
-80.465207, 2.2563893
-80.847719, 2.1959150'''
-
-    sources90='''75.718313, 3.3265107
-78.705794, 3.3112273
-83.333856, 3.2743738
-85.677625, 3.2408322
-88.607753, 3.1849852
-90.425210, 3.1244291
-91.686498, 3.0559504
-92.655226, 2.9779432
-93.361014, 2.8792699
-93.656530, 2.7901651
-94.333415, 2.6787665
-94.540076, 2.6230748'''
-
-    sources100='''89.694001, 4.0710303
-93.384503, 4.0493433
-96.138280, 4.0149829
-99.068527, 3.9551588
-100.88634, 3.8826712
-101.91402, 3.7919338
-102.47358, 3.6869054
-102.88742, 3.5580225
-103.36013, 3.4195910
-103.45118, 3.3129985
-103.49332, 3.2175452'''
-
-    sources106='''96.534814, 4.4635818
-99.112812, 4.4316177
-101.48656, 4.3750070
-102.95238, 4.3216298
-104.50738, 4.2244989
-105.62482, 4.0701222
-106.06919, 3.8998752
-106.24900, 3.7630513
-106.31652, 3.6262291'''
+    
 
     # xx=[4,5,6]
     # yy=[5.5,5,4]
@@ -200,35 +149,17 @@ if __name__ == "__main__":
     # xx,yy=database01.printPoints()
     # database01.calcFcns()
 
+    keys=list(dBAll.keys())
+
     myfile=xlwt.Workbook()
-    mysheet=myfile.add_sheet('50')
-
-    database50=Data(dataPre(sources50),xlimit=10,ylimit=1)
-    printWork(mysheet,database50)
-
-    mysheet=myfile.add_sheet('60')    
-    database60=Data(dataPre(sources60),xlimit=10,ylimit=1)
-    printWork(mysheet,database60)
-
-    mysheet=myfile.add_sheet('70')
-    database70=Data(dataPre(sources70),xlimit=10,ylimit=1)
-    printWork(mysheet,database70)
-
-    mysheet=myfile.add_sheet('80')
-    database80=Data(dataPre(sources80),xlimit=10,ylimit=1)
-    printWork(mysheet,database80)
-
-    mysheet=myfile.add_sheet('90')
-    database90=Data(dataPre(sources90),xlimit=10,ylimit=1)
-    printWork(mysheet,database90)
-
-    mysheet=myfile.add_sheet('100')
-    database100=Data(dataPre(sources100),xlimit=10,ylimit=1)
-    printWork(mysheet,database100)
-
-    mysheet=myfile.add_sheet('106')
-    database106=Data(dataPre(sources106),xlimit=10,ylimit=1)
-    printWork(mysheet,database106)
+    database,r=[],[]
+    
+    for num,keyNum in enumerate (keys):
+        mysheet=myfile.add_sheet(str(keyNum))
+        database.append(Data(dataPre(dBAll[keyNum]),ylimit=1))
+        r+=printWork(mysheet,database[num],keyNum)
+    sheetAll=myfile.add_sheet('All')
+    printAll(sheetAll,r)
     myfile.save('dataBase.xls')
-    plt.axis([10,110,1,5])
+    plt.axis([0,110,0,5])
     plt.show()
