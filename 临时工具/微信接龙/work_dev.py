@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
         pyautogui.scroll(-1000)
 
-        getPosition(0.5,578-158)
+        getPosition(0.5,630-158)
         pyautogui.click()
 
         getPosition(0.5,720-158)
