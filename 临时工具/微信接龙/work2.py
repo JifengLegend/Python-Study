@@ -58,7 +58,6 @@ if __name__ == "__main__":
     pyautogui.PAUSE=0.2
     tarWin=findWindow('报名接龙')
     chRec()
-
     if tarWin==None:
         print("未找到指定应用")
         exit()
@@ -130,4 +129,4 @@ if __name__ == "__main__":
         pyautogui.click()
 
         getPosition(0.5,705)
-        # # pyautogui.click()
+        # pyautogui.click()
