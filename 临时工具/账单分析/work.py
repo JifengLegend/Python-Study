@@ -1,5 +1,4 @@
 import re
-import xlrd
 import os
 from tkinter import *
 import csv
