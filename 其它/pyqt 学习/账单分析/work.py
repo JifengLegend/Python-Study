@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow,QListWidgetItem,QFileDialog
 from functools import partial
+from PyQt5 import QtCore, QtGui, QtWidgets
 import re
 import os
 from tkinter import *
@@ -8,24 +9,14 @@ import csv
 
 
 
+
 import window
 
-def click_success():
-    m01('233')
-    print('我成功啦')
 def chRec():
     recPath=__file__
     recPath=re.sub(r'[a-z_]+\.py','',recPath)
     print(recPath)
     os.chdir(recPath)
-def chFile():
-    fileList=os.listdir()
-
-    for each in range(len(fileList)):
-        print(f"{each+1}:{fileList[each]}")
-    fileNum=int(input("请输入要选择的文件：\n"))-1
-    print(f"目前选择的文件是：{fileList[fileNum]}")
-    return fileList[fileNum]
 def chTypeFile(type):
     fileList=os.listdir()
     appList=[]
@@ -54,7 +45,7 @@ class PayMess:
         self.k=1 if self.k=="收入" else -1
         self.money= float(self.l[payMoney][1:])*self.k
     def calc(self):
-        print(self.money,self.l[6],self.l[payObj],self.l[payTime])
+        # print(self.money,self.l[6],self.l[payObj])
         return self.money
 class ConList():
     def __init__(self,payList,text):
@@ -64,28 +55,69 @@ class ConList():
             self.cache=PayMess(each)
             self.money+=self.cache.calc()
         judge='+' if self.money>0 else ''
-        print(f'{text}的收支计算结果为：\n\t{judge}{self.money:.2f}')
+        print(f'{text}共：\n\t{judge}{self.get()}')
         
     def get(self):
-        return self.money
+        return f2f(self.money)
+
+def f2f(num):
+    cache=f'{num:.2f}'
+    return float(cache)
+def f2s(num):
+    flag='+' if num>0 else ''
+    cache=f'{flag}{num:.2f}'
+    return cache
+def moneyAdd(*l):
+    money=0
+
+    for each in l:
+        money+=each.money
+    return f2f(money)
 def inMoney(l):
     money=0
     for each in l:
         money+=float(each[payMoney][1:])
-    print(f'从零钱里面转入零钱通共：\n\t{money}')
-    return money
+    print(f'从零钱里面转入零钱通共：\n\t{f2f(money)}')
+    return f2f(money)
+def redMoney(l):
+    money=0
+    for each in l:
+        money-=float(each[payMoney][1:])
+    print(f'群发红包共：\n\t{f2f(money)}')
+    return f2f(money)
+def redBackMoney(l):
+    money=0
+    for each in l:
+        money+=float(re.search(r'\d+\.\d+',each[payState]).group())
+    print(f'从红包中退款共：\n\t{f2f(money)}')
+    return f2f(money)
+def judgeUp(l):    
+    '''
+    分析是否为来自上级的转账
+    从 支付方式 和 收入金额 判断
+    '''
+    cache=float(l[payMoney][1:])%40
+    result=1 if (l[6]=='/')and(cache==0) else 0
+    return result
 
 def read():
     fselect=ui.l01.selectedItems()[0].text()
     with open(fselect,'r',encoding='utf-8')as f:
         reader=csv.reader(f)
         sheet=list(reader)
-        name='账单持有人：'+re.search(r'\[.*\]',sheet[1][0]).group()
+        name=re.search(r'\[.*\]',sheet[1][0]).group()
+        names='账单持有人：'+name
         
 
         listDef=[]
         listSelf=[]
         listIn=[]
+        listAdd=[]
+        listDec=[]
+        listRed=[]
+        listRedBack=[]
+
+
 
         for row in sheet:
             if (len(row)==11) and (len(row[0])!=4):
@@ -96,26 +128,53 @@ def read():
                     listDef.append(row)
                 if (row[4]=='/'):
                     listIn.append(row)
+                if ((row[2]=='瀮风')or (row[2]=='偈妮')) and (judgeUp(row)):
+                    listAdd.append(row)
+                if(row[2]=="发出群红包") :
+                    listRed.append(row)
+                    if (row[payState][0:2]=='已退'):
+                        listRedBack.append(row)
+                if (row[payMoney]=='¥80.00')or (row[payMoney]=='¥40.00'):
+                    listDec.append(row)
         # print(listSelf)
         print(f'账单归属人：{name}')
-        pname.setText(re.search(r'\[.*\]',sheet[1][0]).group())
+        # name='[四组]'
+        pname.setText(name)
+        
+        if name!='[偈妮]':
+            pname.setStyleSheet('color:green;')
 
 
         def_money=ConList(listDef,'零钱(默认)')
         flag='+' if def_money.money>0 else ''
         result=f'分析结果：{flag}{def_money.money:.2f}'
         print(result)
-        m01(f'{flag}{def_money.money:.2f}')
+        ui.m02.setText(f'{flag}{def_money.money:.2f}')
 
-        
+
         other_money=ConList(listSelf,'其它')
-        in_money=inMoney(listIn)
-        print(f'其它结余：{other_money.money+in_money:.2f}')
-        flag='+' if other_money.money+in_money>0 else ''
-        m02(f'{flag}{other_money.money+in_money:.2f}')
+        def_money=ConList(listDef,'综合分析(默认)')
+        money_In=ConList(listAdd,'瀮风转入')
+        money_Dec=ConList(listDec,"转账支出")
+        red_Money=ConList(listRed,'群发红包')
+        back_Money=redBackMoney(listRedBack)
 
-        ui.decText02.setText(f'{flag}{def_money.money:.2f}')
-        ui.addText02.setText(f'{flag}{def_money.money:.2f}')
+        finMoney=f2s(moneyAdd(money_In,money_Dec,red_Money)+back_Money)
+
+
+
+        ui.x01.setText(f2s(money_In.money))
+        ui.x02.setText(f2s(moneyAdd(money_Dec,red_Money)))
+        ui.x03.setText(f2s(back_Money))
+
+        ui.m01.setText(finMoney)
+        ui.m02.setText(f2s(def_money.money))
+        ui.m03.setText(f2s(other_money.money))
+
+        ui.decText02.setText(finMoney)
+        ui.addText02.setText(finMoney)
+
+
 def setRec():
     dir_choose=QFileDialog.getExistingDirectory(None,'选取文件夹','.')
     print(f'当前目录为：{dir_choose}')
@@ -146,11 +205,9 @@ if __name__ == '__main__':
     ui.b01.clicked.connect(read)
     pname=ui.pname
     pname.setText('')
-    m01=ui.m01.display
-    m02=ui.m02.display
+
     chRec()
     init()
-    
 
     ui.l01.setSpacing(3)
     ui.setRec.triggered.connect(setRec)
