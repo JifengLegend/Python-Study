@@ -53,6 +53,10 @@ class ConList():
 def f2f(num):
     cache=f'{num:.2f}'
     return float(cache)
+def f2s(num):
+    flag='+' if num>0 else ''
+    cache=f'{flag}{num:.2f}'
+    return cache
 def moneyAdd(*l):
     money=0
 
