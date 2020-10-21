@@ -40,7 +40,7 @@
         <number>10</number>
        </property>
        <item row="0" column="0">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="genBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -53,7 +53,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="formulaBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -66,7 +66,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="tableBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -79,7 +79,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="openTableBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -92,7 +92,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="mathpixBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -105,7 +105,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QPushButton" name="pushButton_5">
+        <widget class="QPushButton" name="copyBtn">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -121,7 +121,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QTextEdit" name="textShow">
       <property name="font">
        <font>
         <family>微软雅黑 Light</family>
