@@ -6,15 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>368</width>
-    <height>600</height>
+    <width>272</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>青灵OCR V0.2</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="qrec.qrc">
+    <normaloff>:/pic/心2.ico</normaloff>:/pic/心2.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,2">
+    <property name="topMargin">
+     <number>3</number>
+    </property>
     <property name="bottomMargin">
      <number>0</number>
     </property>
@@ -22,8 +29,8 @@
      <widget class="QGroupBox" name="groupBox">
       <property name="font">
        <font>
-        <family>微软雅黑 Light</family>
-        <pointsize>14</pointsize>
+        <family>微软雅黑</family>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="title">
@@ -32,6 +39,9 @@
       <layout class="QGridLayout" name="gridLayout">
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
        </property>
        <property name="bottomMargin">
         <number>9</number>
@@ -44,8 +54,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>通用识别</string>
@@ -57,8 +73,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>公式识别</string>
@@ -70,8 +92,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>表格识别</string>
@@ -83,8 +111,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>表格下载</string>
@@ -96,8 +130,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>MathPix</string>
@@ -109,8 +149,14 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>35</height>
+           <height>31</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>微软雅黑 Light</family>
+           <pointsize>12</pointsize>
+          </font>
          </property>
          <property name="text">
           <string>复制</string>
@@ -125,8 +171,18 @@
       <property name="font">
        <font>
         <family>微软雅黑 Light</family>
-        <pointsize>14</pointsize>
+        <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="markdown">
+       <string/>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'微软雅黑 Light'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:9px; margin-bottom:9px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -137,13 +193,15 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>368</width>
+     <width>272</width>
      <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="qrec.qrc"/>
+ </resources>
  <connections/>
 </ui>

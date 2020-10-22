@@ -14,6 +14,7 @@ import re
     # print('我成功啦')
 def pre():
     # 保存剪贴板截图
+    ui.statusbar.showMessage('正在努力识别中')
     try:
         im = ImageGrab.grabclipboard()
         im.save('cache.png', 'PNG')
@@ -33,7 +34,7 @@ def pre():
     response = requests.get(host)
     global  headers
     headers = {'content-type': 'application/x-www-form-urlencoded'}
-    ui.textShow.setText('|----______|\n获取 token 中...')
+    # ui.statusbar.showMessage('获取 token 中...')
     if response:
         global access_token
         access_token = response.json()['access_token']
@@ -43,7 +44,6 @@ def gen():
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
     request_url = request_url + "?access_token=" + access_token
     response = requests.post(request_url, data=params, headers=headers)
-    ui.textShow.setText('|--------__|\n正在努力识别中...')
     if response:
         print(response.json())
         text = ''
@@ -51,32 +51,33 @@ def gen():
             text += each["words"] + '\n'
         print(text)
         ui.textShow.setText(text)
+        ui.statusbar.showMessage('ready')
 
 def formula():
-    pre()
     pre()
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/formula"
     request_url = request_url + "?access_token=" + access_token
     params['disp_formula']='true'
     response = requests.post(request_url, data=params, headers=headers)
-    ui.textShow.setText('|--------__|\n正在努力识别中...')
+
     if response:
         a=response.json()['formula_result'][0]['words']
         print(a)
         ui.textShow.setText(a)
+        ui.statusbar.showMessage('ready')
 def table():
     pre()
     request_url = "https://aip.baidubce.com/rest/2.0/solution/v1/form_ocr/request"
     request_url = request_url + "?access_token=" + access_token
     response = requests.post(request_url, data=params, headers=headers)
-    ui.textShow.setText('|----______|\n生成表格ing...')
+
     if response:
         print(response.json())
 
     ids = {'request_id': response.json()['result'][0]['request_id']}
     getFormUrl = 'https://aip.baidubce.com/rest/2.0/solution/v1/form_ocr/get_request_result'
     getFormUrl = getFormUrl + "?access_token=" + access_token
-    ui.textShow.setText('|--------__|\n获取表格ing...')
+
     time.sleep(3)
     response2 = requests.post(getFormUrl, data=ids, headers=headers)
     if response2:
@@ -84,6 +85,7 @@ def table():
         downloadUrl=response2.json()['result']['result_data']
         print(downloadUrl)
         ui.textShow.setText(downloadUrl)
+        ui.statusbar.showMessage('ready')
 def openTable():
      web.open(downloadUrl)
 def latex(args, headers,timeout=30):
@@ -111,9 +113,11 @@ def mathpix():
     mathPure=re.sub(' ','',r['latex_simplified'])
     print(mathPure)
     ui.textShow.setText(mathPure)
+    ui.statusbar.showMessage('ready')
 def copy():
     ui.textShow.selectAll()
     ui.textShow.copy()
+    ui.statusbar.showMessage('ready')
 
 
 if __name__ == '__main__':
@@ -131,6 +135,7 @@ if __name__ == '__main__':
     ui.mathpixBtn.clicked.connect(mathpix)
     ui.copyBtn.clicked.connect(copy)
     ui.textShow.documentTitle()
+    ui.statusbar.showMessage('ready')
 
 
 
