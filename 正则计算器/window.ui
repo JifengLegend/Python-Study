@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>418</width>
+    <height>670</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>正则计算器 Pro</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>微软雅黑 Light</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>在这里输入想要转换的文本(&amp;In)：</string>
+      </property>
+      <property name="buddy">
+       <cstring>textGet</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QTextEdit" name="textGet">
+      <property name="font">
+       <font>
+        <family>微软雅黑 Light</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <family>微软雅黑 Light</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>替换/翻译结果(&amp;Result)：</string>
+      </property>
+      <property name="buddy">
+       <cstring>textResult</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QTextEdit" name="textResult">
+      <property name="font">
+       <font>
+        <family>微软雅黑 Light</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>匹配(&amp;M)：</string>
+        </property>
+        <property name="buddy">
+         <cstring>e1</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="e1">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="proBtn">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background:#666699;
+color:white;</string>
+        </property>
+        <property name="text">
+         <string>Pro</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>替换(&amp;R)：</string>
+        </property>
+        <property name="buddy">
+         <cstring>e2</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="e2">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="startBtn">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>418</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Save">
+    <property name="title">
+     <string>&amp;Save</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Read">
+    <property name="title">
+     <string>&amp;Read</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuTrans">
+    <property name="title">
+     <string>Trans</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuSuper">
+    <property name="title">
+     <string>Super</string>
+    </property>
+    <addaction name="actionTrans"/>
+    <addaction name="actionTrans_2"/>
+    <addaction name="actionRegex"/>
+    <addaction name="actionCopy"/>
+    <addaction name="separator"/>
+    <addaction name="action_1"/>
+   </widget>
+   <addaction name="menu_Save"/>
+   <addaction name="menu_Read"/>
+   <addaction name="menuTrans"/>
+   <addaction name="menuSuper"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionTrans">
+   <property name="text">
+    <string>Trans</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionTrans_2">
+   <property name="text">
+    <string>Trans +</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionRegex">
+   <property name="text">
+    <string>Regex +</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>Copy +</string>
+   </property>
+  </action>
+  <action name="action_1">
+   <property name="text">
+    <string>默认1：文本净化</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
