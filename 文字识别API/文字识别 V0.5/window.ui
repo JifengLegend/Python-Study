@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
+    <width>379</width>
     <height>616</height>
    </rect>
   </property>
@@ -68,7 +68,7 @@
         </layout>
        </item>
        <item row="1" column="0">
-        <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,0,1,1,1">
+        <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1,1,1,1">
          <item row="0" column="2">
           <spacer name="horizontalSpacer">
            <property name="orientation">
@@ -100,6 +100,12 @@
          </item>
          <item row="0" column="4">
           <widget class="QPushButton" name="autoBtn">
+           <property name="minimumSize">
+            <size>
+             <width>26</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <family>MS Serif</family>
@@ -180,6 +186,12 @@
          </item>
          <item row="1" column="4">
           <widget class="QPushButton" name="defBtn">
+           <property name="minimumSize">
+            <size>
+             <width>26</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <family>MS Serif</family>
@@ -339,7 +351,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>386</width>
+     <width>379</width>
      <height>26</height>
     </rect>
    </property>
