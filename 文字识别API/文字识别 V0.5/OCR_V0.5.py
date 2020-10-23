@@ -45,7 +45,37 @@ def pre():
         global access_token
         access_token = response.json()['access_token']
         print(access_token)
+def latex(args, headers,timeout=30):
+    service = 'https://api.mathpix.com/v3/latex'
+    r = requests.post(service,
+                      data=json.dumps(args), headers=headers, timeout=timeout)
+    return json.loads(r.text)
+def mathMode():
+    env = os.environ
+    default_headers = {
+        'app_id': env.get('APP_ID', '2996710293_qq_com_864f30'),
+        'app_key': env.get('APP_KEY', '8664e98ebe9bd0008fd0'),
+        'Content-type': 'application/json'
+    }
+
+    im = ImageGrab.grabclipboard()
+    im.save('equa.png', 'PNG')
+    image_data=open('equa.png',"rb").read()
+    image_code="data:image/jpg;base64," + base64.b64encode(image_data).decode()
+    r = latex({
+        'src': image_code,
+        'formats': ['latex_simplified']
+    },default_headers)
+    mathPure=re.sub(' ','',r['latex_simplified'])
+    print(mathPure)
+    ui.rawText.setText(mathPure)
+    ui.statusbar.showMessage('ready')
 def gen():
+    if ui.c02.checkState()==2:
+        mathMode()
+    else:
+        genMode()
+def genMode():
     pre()
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
     request_url = request_url + "?access_token=" + access_token
@@ -207,7 +237,18 @@ def delAction():
         ui.transText.selectAll()
         ui.transText.clear()
         ui.statusbar.showMessage('翻译窗口已清空')
-        
+def regMes():
+    if ui.c01.checkState()==2:
+        ui.statusbar.showMessage('开启文本净化')
+    else:
+        ui.statusbar.showMessage('关闭文本净化')
+def mathMes():
+    if ui.c02.checkState()==2:
+        ui.statusbar.showMessage('公式识别模式已启动~')
+        ui.genBtn.setText('公式识别')
+    else:
+        ui.statusbar.showMessage('公式识别模式关闭，当前为通用识别')
+        ui.genBtn.setText('文本识别')
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
@@ -224,6 +265,8 @@ if __name__ == '__main__':
     ui.transBtn.clicked.connect(transMode)
     ui.copyBtn.clicked.connect(copyAction)
     ui.delBtn.clicked.connect(delAction)
+    ui.c02.toggled.connect(regMes)
+    ui.c02.toggled.connect(mathMes)
 
 
 
