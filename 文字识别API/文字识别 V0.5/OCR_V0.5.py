@@ -1,6 +1,7 @@
 # coding=utf-8
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow,QShortcut
+from PyQt5 import QtGui,QtCore
 from functools import partial
 import requests
 import base64
@@ -146,22 +147,22 @@ def Trans(raw='apple',to_lang='zh',from_lang='auto',\
             httpClient.close()
 def autoRun():
     if ui.autoR.isChecked()==True:
-        ui.defTo.setStyleSheet('color:black')
+        ui.defTo.setStyleSheet('color:black;font-weight:normal;')
         ui.defBtn.setStyleSheet('color:black;text-align:center;padding:3px 0px')
-        ui.defR.setStyleSheet('color:black')
+        ui.defR.setStyleSheet('color:black;font-weight:normal;')
 
-        ui.autoTo.setStyleSheet('color:#1884d9')
-        ui.autoBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px')
-        ui.autoR.setStyleSheet('color:#1884d9')
+        ui.autoTo.setStyleSheet('color:#1884d9;font-weight:700;')
+        ui.autoBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px;')
+        ui.autoR.setStyleSheet('color:#1884d9;font-weight:700;')
 
     else:
-        ui.defTo.setStyleSheet('color:#1884d9')
-        ui.defBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px')
-        ui.defR.setStyleSheet('color:#1884d9')
+        ui.defTo.setStyleSheet('color:#1884d9;font-weight:700;')
+        ui.defBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px;')
+        ui.defR.setStyleSheet('color:#1884d9;font-weight:700;')
 
-        ui.autoTo.setStyleSheet('color:black')
-        ui.autoBtn.setStyleSheet('color:black;text-align:center;padding:3px 0px')
-        ui.autoR.setStyleSheet('color:black')
+        ui.autoTo.setStyleSheet('color:black;font-weight:normal;')
+        ui.autoBtn.setStyleSheet('color:black;text-align:center;padding:3px 0px;')
+        ui.autoR.setStyleSheet('color:black;font-weight:normal;')
     ui.statusbar.showMessage('当前状态为：'+search())
 
 
@@ -184,9 +185,9 @@ def defChange():
     ui.statusbar.showMessage('当前状态为：'+search())
 
 def preLoad():
-    ui.autoTo.setStyleSheet('color:#1884d9')
+    ui.autoTo.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.autoBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px')
-    ui.autoR.setStyleSheet('color:#1884d9')
+    ui.autoR.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.tabCtrl.setCurrentIndex(0)
     ui.statusbar.showMessage('Ready')
 def search():
@@ -244,21 +245,85 @@ def regMes():
         ui.statusbar.showMessage('关闭文本净化')
 def mathMes():
     if ui.c02.checkState()==2:
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/ico/公式.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ui.statusbar.showMessage('公式识别模式已启动~')
         ui.genBtn.setText('公式识别')
+        ui.genBtn.setIcon(icon1)
     else:
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/ico/scanning.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ui.statusbar.showMessage('公式识别模式关闭，当前为通用识别')
         ui.genBtn.setText('文本识别')
+        ui.genBtn.setIcon(icon1)
+def onePress():
+    ui.rawText.selectAll()
+    ui.rawText.clear()
+    ui.rawText.paste()
+    transMode()
+    ui.statusbar.showMessage('一键翻译 已完成')
+def onTop():
+
+    _translate = QtCore.QCoreApplication.translate
+    if not ui.topAction.isChecked():
+        MainWindow.setWindowFlags(QtCore.Qt.Widget)# 取消置顶
+        MainWindow.show()
+        ui.statusbar.showMessage('窗口置顶 已取消')
+        MainWindow.setWindowTitle(_translate("MainWindow", "青灵OCR V0.5"))
+    else:
+        MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint) # 打开置顶
+        MainWindow.show()
+        MainWindow.setWindowTitle(_translate("MainWindow", "青灵OCR V0.5 - 置顶模式"))
+        ui.statusbar.showMessage('窗口置顶 已启动')
+def activeAutoCatch():
+    if ui.autoCatch.isChecked():
+        ui.statusbar.showMessage('自动捕获模式 已启动')
+
+
+    else:
+        ui.statusbar.showMessage('自动捕获模式 已关闭')
+    pass
+
+def runAutoCatch():
+    if ui.autoCatch.isChecked():
+        onePress()
+    else:
+        pass
+
+def fontAddAction():
+    global fontSize
+    fontSize+=1
+    font = QtGui.QFont()
+    font.setFamily("微软雅黑 Light") #括号里可以设置成自己想要的其它字体
+    font.setPointSize(fontSize) 
+    ui.rawText.setFont(font)
+    ui.transText.setFont(font)
+    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}')
+
+def fontDecAction():
+    global fontSize
+    fontSize-=1
+    fontSize=fontSize if fontSize>2 else 2
+    font = QtGui.QFont()
+    font.setFamily("微软雅黑 Light") #括号里可以设置成自己想要的其它字体
+    font.setPointSize(fontSize) 
+    ui.rawText.setFont(font)
+    ui.transText.setFont(font)
+    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}')
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     ui = window.Ui_MainWindow()
     ui.setupUi(MainWindow)
     # ui.pushButton.clicked.connect(partial(convert,ui))
+    cp=app.clipboard()
+    cp.dataChanged.connect(runAutoCatch)
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
-    global autoBing,defBing
-    autoBing,defBing=False,False
+    global autoBing,defBing,topBing,fontSize
+    autoBing,defBing,topBing=False,False,False
+    fontSize=14
     preLoad()
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
@@ -267,9 +332,13 @@ if __name__ == '__main__':
     ui.delBtn.clicked.connect(delAction)
     ui.c02.toggled.connect(regMes)
     ui.c02.toggled.connect(mathMes)
-
-
-
+    # QShortcut(QtGui.QKeySequence(MainWindow.tr('Ctrl+B')),MainWindow,onePress)
+    # QShortcut(QtGui.QKeySequence(MainWindow.tr('Ctrl+Q')),MainWindow,onTop)
+    ui.oneAction.triggered.connect(onePress)
+    ui.topAction.triggered.connect(onTop)
+    ui.fontAdd.triggered.connect(fontAddAction)
+    ui.fontDec.triggered.connect(fontDecAction)
+    ui.autoCatch.triggered.connect(activeAutoCatch)
 
 
     MainWindow.show()
