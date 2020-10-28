@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="ico">
+    <file>箭头右.png</file>
+    <file>处理1.png</file>
+    <file>信号 (1).png</file>
     <file>公式.png</file>
     <file>scanning.png</file>
     <file>翻译.png</file>

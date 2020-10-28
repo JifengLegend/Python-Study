@@ -88,7 +88,7 @@ def genMode():
         for each in response.json()['words_result']:
             text += each["words"] + '\n'
         if ui.c01.checkState()==2:
-            text=re.sub(r'(?<!\.|。)\n(?![A-Z])',' ',text)
+            text=textClean(text)
             ui.statusbar.showMessage('文字识别/净化 已完成')
         else:
             ui.statusbar.showMessage('文字识别 已完成')
@@ -97,6 +97,13 @@ def genMode():
         print(text)
         ui.tabCtrl.setCurrentIndex(0)
         ui.rawText.setText(text)
+def textClean(strs,addtionRex=r'Fault Tree Handbook with .*Ver.*\nChapter.*'):
+    if addtionRex=='':
+        pass
+    else:
+        strs=re.sub(addtionRex,'\n',strs)
+    strs=re.sub(r'(?<!\.|。)\n(?![A-Z])',' ',strs)
+    return strs
 def Trans(raw='apple',to_lang='zh',from_lang='auto',\
     app_id='20200406000412945',secret_Key = 'pZCsP6EUTkXG0lLwOYAS',\
        ):
@@ -211,14 +218,17 @@ def getType():
 def transMode():
     if ui.c01.checkState()==2:
         raw=ui.rawText.toPlainText()
-        raw=re.sub(r'(?<!\.|。)\n(?![A-Z])',' ',raw)
+        raw=textClean(raw)
         ui.rawText.setText(raw)
     cache=getType()
     print(cache)
-    strs=Trans(ui.rawText.toPlainText(),cache[1],cache[0])
+    strs=Trans(ui.rawText.toPlainText(),cache[1],cache[0],\
+        app_id='20201027000600376',secret_Key='5wiYK3JixYvFggKoGefp'
+        )
     print(strs)
+
+    ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
-    ui.transText.setPlainText(strs)
     ui.statusbar.showMessage('翻译完成~')
 def copyAction():
     if ui.tabCtrl.currentIndex()==0:
@@ -260,7 +270,20 @@ def onePress():
     ui.rawText.selectAll()
     ui.rawText.clear()
     ui.rawText.paste()
-    transMode()
+
+    if ui.c01.checkState()==2:
+        raw=ui.rawText.toPlainText()
+        raw=textClean(raw)
+        ui.rawText.setText(raw)
+    cache=getType()
+    print(cache)
+    strs=Trans(ui.rawText.toPlainText(),cache[1],cache[0],\
+        app_id='20201027000600376',secret_Key='5wiYK3JixYvFggKoGefp')
+    print(strs)
+    ui.transText.setText(strs)
+    ui.tabCtrl.setCurrentIndex(1)
+    ui.statusbar.showMessage('翻译完成~')
+
     ui.statusbar.showMessage('一键翻译 已完成')
 def onTop():
 
@@ -269,26 +292,45 @@ def onTop():
         MainWindow.setWindowFlags(QtCore.Qt.Widget)# 取消置顶
         MainWindow.show()
         ui.statusbar.showMessage('窗口置顶 已取消')
-        MainWindow.setWindowTitle(_translate("MainWindow", "青灵OCR V0.5"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "可可 OCR"))
     else:
         MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint) # 打开置顶
         MainWindow.show()
-        MainWindow.setWindowTitle(_translate("MainWindow", "青灵OCR V0.5 - 置顶模式"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "可可 OCR - 置顶模式"))
         ui.statusbar.showMessage('窗口置顶 已启动')
 def activeAutoCatch():
     if ui.autoCatch.isChecked():
         ui.statusbar.showMessage('自动捕获模式 已启动')
-
+        ui.autoMBtn.setChecked(1)
+        ui.autoCatch.setChecked(1)
 
     else:
         ui.statusbar.showMessage('自动捕获模式 已关闭')
+        ui.autoMBtn.setChecked(0)
+        ui.autoCatch.setChecked(0)
+    pass
+def activeMAutoCatch():
+    if  ui.autoMBtn.isChecked():
+        ui.statusbar.showMessage('自动捕获模式 已启动')
+        ui.autoCatch.setChecked(1)
+
+    else:
+        ui.statusbar.showMessage('自动捕获模式 已关闭')
+        ui.autoCatch.setChecked(0)
     pass
 
 def runAutoCatch():
-    if ui.autoCatch.isChecked():
-        onePress()
-    else:
+    global runTimes
+    if cp.text()==ui.transText.toPlainText():
+        print('检测到刚复制的内容为刚才的翻译结果，跳过')
         pass
+    else:        
+        if runTimes%2==0:
+            if ui.autoCatch.isChecked():
+                onePress()        
+            else:
+                pass
+    runTimes+=1
 
 def fontAddAction():
     global fontSize
@@ -310,6 +352,9 @@ def fontDecAction():
     ui.rawText.setFont(font)
     ui.transText.setFont(font)
     ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}')
+def printVer():
+    ver=0.5
+    ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -321,9 +366,9 @@ if __name__ == '__main__':
     cp.dataChanged.connect(runAutoCatch)
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
-    global autoBing,defBing,topBing,fontSize
+    global autoBing,defBing,topBing,fontSize,runTimes
     autoBing,defBing,topBing=False,False,False
-    fontSize=14
+    fontSize,runTimes=14,0
     preLoad()
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
@@ -339,6 +384,9 @@ if __name__ == '__main__':
     ui.fontAdd.triggered.connect(fontAddAction)
     ui.fontDec.triggered.connect(fontDecAction)
     ui.autoCatch.triggered.connect(activeAutoCatch)
+    ui.verBtn.triggered.connect(printVer)
+    ui.autoMBtn.clicked.connect(activeMAutoCatch)
+    ui.oneMBtn.clicked.connect(onePress)
 
 
     MainWindow.show()

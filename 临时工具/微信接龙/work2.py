@@ -79,14 +79,14 @@ if __name__ == "__main__":
         pyautogui.click()
 
         # 转发文件
-        getPosition(70,698)
-        pyautogui.click()
-        getPosition(0.5,313)
-        pyautogui.click()
-        pyautogui.click(847,329)
-        typeWords('233')
-        pyautogui.press('space')
-        pyautogui.click(818,421)
+        # getPosition(70,698)
+        # pyautogui.click()
+        # getPosition(0.5,313)
+        # pyautogui.click()
+        # pyautogui.click(847,329)
+        # typeWords('233')
+        # pyautogui.press('space')
+        # pyautogui.click(818,421)
 
 
         # 选中自己

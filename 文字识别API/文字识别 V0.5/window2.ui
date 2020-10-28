@@ -90,10 +90,10 @@
             <string>Ctrl+T</string>
            </property>
            <property name="checkable">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="checked">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="autoRepeat">
             <bool>true</bool>
@@ -265,13 +265,7 @@
                </property>
                <property name="icon">
                 <iconset resource="rec.qrc">
-                 <normaloff>:/ico/箭头右.png</normaloff>:/ico/箭头右.png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>19</width>
-                 <height>19</height>
-                </size>
+                 <normaloff>:/ico/批量运维.png</normaloff>:/ico/批量运维.png</iconset>
                </property>
               </widget>
              </item>
@@ -300,13 +294,7 @@
                </property>
                <property name="icon">
                 <iconset resource="rec.qrc">
-                 <normaloff>:/ico/信号 (1).png</normaloff>:/ico/信号 (1).png</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>19</width>
-                 <height>19</height>
-                </size>
+                 <normaloff>:/ico/监控 (1).png</normaloff>:/ico/监控 (1).png</iconset>
                </property>
                <property name="checkable">
                 <bool>true</bool>
