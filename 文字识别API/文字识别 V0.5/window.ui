@@ -47,6 +47,9 @@
              <height>35</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>对 剪贴板中图片 进行 &lt;b&gt;文字识别&lt;/b&gt;</string>
+           </property>
            <property name="text">
             <string>文字识别</string>
            </property>
@@ -72,6 +75,9 @@
              <width>0</width>
              <height>35</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>调用 &lt;b&gt;百度翻译&lt;/b&gt; API</string>
            </property>
            <property name="text">
             <string>百度翻译</string>
@@ -138,6 +144,9 @@
                <pointsize>11</pointsize>
               </font>
              </property>
+             <property name="toolTip">
+              <string>开关  &lt;b&gt;文本净化&lt;/b&gt; （多余断行）</string>
+             </property>
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -162,6 +171,9 @@
                <family>微软雅黑 Light</family>
                <pointsize>11</pointsize>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>切换为 MathPix &lt;b&gt;公式识别&lt;/b&gt;</string>
              </property>
              <property name="text">
               <string>公式识别</string>
@@ -196,6 +208,9 @@
                  <pointsize>11</pointsize>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>复制 &lt;b&gt;当前文本窗口&lt;/b&gt; 内容</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -228,6 +243,9 @@
                  <pointsize>11</pointsize>
                 </font>
                </property>
+               <property name="toolTip">
+                <string>清空 &lt;b&gt;当前文本窗口&lt;/b&gt; 内容</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -259,6 +277,9 @@
                  <family>微软雅黑 Light</family>
                  <pointsize>11</pointsize>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>对 &lt;b&gt;剪贴板中文字内容&lt;/b&gt; 进行翻译</string>
                </property>
                <property name="text">
                 <string/>
@@ -294,6 +315,9 @@
                  <family>微软雅黑 Light</family>
                  <pointsize>11</pointsize>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>开/关 &lt;b&gt;自动捕获&lt;/b&gt; 模式</string>
                </property>
                <property name="text">
                 <string/>
@@ -345,6 +369,9 @@
                <pointsize>11</pointsize>
               </font>
              </property>
+             <property name="toolTip">
+              <string>选择为 &lt;b&gt;自动模式&lt;/b&gt;</string>
+             </property>
              <property name="text">
               <string>Auto</string>
              </property>
@@ -375,6 +402,9 @@
                <family>MS Serif</family>
                <pointsize>9</pointsize>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>切换 &lt;b&gt;翻译语言&lt;/b&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">text-align:center;padding:3px 0px</string>
@@ -441,6 +471,9 @@
                <pointsize>11</pointsize>
               </font>
              </property>
+             <property name="toolTip">
+              <string>选择为 &lt;b&gt;手动模式&lt;/b&gt;</string>
+             </property>
              <property name="text">
               <string>Zh  </string>
              </property>
@@ -468,6 +501,9 @@
                <family>MS Serif</family>
                <pointsize>9</pointsize>
               </font>
+             </property>
+             <property name="toolTip">
+              <string>切换 &lt;b&gt;翻译语言&lt;/b&gt;</string>
              </property>
              <property name="styleSheet">
               <string notr="true">text-align:center;padding:3px 0px</string>
@@ -636,6 +672,7 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Pro</string>
     </property>
+    <addaction name="proAction"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -746,6 +783,11 @@ p, li { white-space: pre-wrap; }
   <action name="describeBtn">
    <property name="text">
     <string>简介</string>
+   </property>
+  </action>
+  <action name="proAction">
+   <property name="text">
+    <string>自定义规则</string>
    </property>
   </action>
  </widget>

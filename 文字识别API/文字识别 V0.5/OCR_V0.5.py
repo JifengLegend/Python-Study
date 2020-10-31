@@ -1,7 +1,7 @@
 # coding=utf-8
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow,QShortcut
-from PyQt5 import QtGui,QtCore
+from PyQt5.QtWidgets import QApplication, QMainWindow,QShortcut,QDialog,QPushButton
+from PyQt5 import QtGui,QtCore,QtWidgets
 from functools import partial
 import requests
 import base64
@@ -70,7 +70,7 @@ def mathMode():
     mathPure=re.sub(' ','',r['latex_simplified'])
     print(mathPure)
     ui.rawText.setText(mathPure)
-    ui.statusbar.showMessage('ready')
+    ui.statusbar.showMessage('ready',5000)
 def gen():
     if ui.c02.checkState()==2:
         mathMode()
@@ -81,7 +81,7 @@ def genMode():
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
     request_url = request_url + "?access_token=" + access_token
     response = requests.post(request_url, data=params, headers=headers)
-    ui.statusbar.showMessage('正在努力识别中...')
+    ui.statusbar.showMessage('正在努力识别中...',5000)
     if response:
         print(response.json())
         text = ''
@@ -89,19 +89,20 @@ def genMode():
             text += each["words"] + '\n'
         if ui.c01.checkState()==2:
             text=textClean(text)
-            ui.statusbar.showMessage('文字识别/净化 已完成')
+            ui.statusbar.showMessage('文字识别/净化 已完成',5000)
         else:
-            ui.statusbar.showMessage('文字识别 已完成')
+            ui.statusbar.showMessage('文字识别 已完成',5000)
        
 
         print(text)
         ui.tabCtrl.setCurrentIndex(0)
         ui.rawText.setText(text)
-def textClean(strs,addtionRex=r'Fault Tree Handbook with .*Ver.*\nChapter.*'):
-    if addtionRex=='':
+def textClean(strs):
+    global addRex
+    if addRex=='':
         pass
     else:
-        strs=re.sub(addtionRex,'\n',strs)
+        strs=re.sub(addRex,'\n',strs)
     strs=re.sub(r'(?<!\.|。)\n(?![A-Z])',' ',strs)
     return strs
 def Trans(raw='apple',to_lang='zh',from_lang='auto',\
@@ -170,7 +171,7 @@ def autoRun():
         ui.autoTo.setStyleSheet('color:black;font-weight:normal;')
         ui.autoBtn.setStyleSheet('color:black;text-align:center;padding:3px 0px;')
         ui.autoR.setStyleSheet('color:black;font-weight:normal;')
-    ui.statusbar.showMessage('当前状态为：'+search())
+    ui.statusbar.showMessage('当前状态为：'+search(),5000)
 
 
 def autoChange():
@@ -180,7 +181,7 @@ def autoChange():
         ui.autoTo.setText('En')
     else:
         ui.autoTo.setText('Zh')
-    ui.statusbar.showMessage('当前状态为：'+search())
+    ui.statusbar.showMessage('当前状态为：'+search(),5000)
 
 def defChange():
     global autoBing,defBing
@@ -189,14 +190,14 @@ def defChange():
         ui.defBtn.setText('<--')
     else:
         ui.defBtn.setText('-->')
-    ui.statusbar.showMessage('当前状态为：'+search())
+    ui.statusbar.showMessage('当前状态为：'+search(),5000)
 
 def preLoad():
     ui.autoTo.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.autoBtn.setStyleSheet('color:#1884d9;text-align:center;padding:3px 0px')
     ui.autoR.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.tabCtrl.setCurrentIndex(0)
-    ui.statusbar.showMessage('Ready')
+    ui.statusbar.showMessage('Ready',5000)
 def search():
     strs=''
     if(ui.autoR.isChecked()==True):
@@ -229,41 +230,41 @@ def transMode():
 
     ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
-    ui.statusbar.showMessage('翻译完成~')
+    ui.statusbar.showMessage('翻译完成~',5000)
 def copyAction():
     if ui.tabCtrl.currentIndex()==0:
         ui.rawText.selectAll()
         ui.rawText.copy()
-        ui.statusbar.showMessage('源文本已复制到剪贴板啦')
+        ui.statusbar.showMessage('源文本已复制到剪贴板啦',5000)
     else:
         ui.transText.selectAll()
         ui.transText.copy()
-        ui.statusbar.showMessage('翻译结果已复制到剪贴板啦')
+        ui.statusbar.showMessage('翻译结果已复制到剪贴板啦',5000)
 def delAction():
     if ui.tabCtrl.currentIndex()==0:
         ui.rawText.selectAll()
         ui.rawText.clear()
-        ui.statusbar.showMessage('源文本窗口已清空')
+        ui.statusbar.showMessage('源文本窗口已清空',5000)
     else:
         ui.transText.selectAll()
         ui.transText.clear()
-        ui.statusbar.showMessage('翻译窗口已清空')
+        ui.statusbar.showMessage('翻译窗口已清空',5000)
 def regMes():
     if ui.c01.checkState()==2:
-        ui.statusbar.showMessage('开启文本净化')
+        ui.statusbar.showMessage('开启文本净化',5000)
     else:
-        ui.statusbar.showMessage('关闭文本净化')
+        ui.statusbar.showMessage('关闭文本净化',5000)
 def mathMes():
     if ui.c02.checkState()==2:
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/ico/公式.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ui.statusbar.showMessage('公式识别模式已启动~')
+        ui.statusbar.showMessage('公式识别模式已启动~',5000)
         ui.genBtn.setText('公式识别')
         ui.genBtn.setIcon(icon1)
     else:
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/ico/scanning.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ui.statusbar.showMessage('公式识别模式关闭，当前为通用识别')
+        ui.statusbar.showMessage('公式识别模式关闭，当前为通用识别',5000)
         ui.genBtn.setText('文本识别')
         ui.genBtn.setIcon(icon1)
 def onePress():
@@ -282,40 +283,40 @@ def onePress():
     print(strs)
     ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
-    ui.statusbar.showMessage('翻译完成~')
+    ui.statusbar.showMessage('翻译完成~',5000,5000)
 
-    ui.statusbar.showMessage('一键翻译 已完成')
+    ui.statusbar.showMessage('一键翻译 已完成',5000)
 def onTop():
 
     _translate = QtCore.QCoreApplication.translate
     if not ui.topAction.isChecked():
         MainWindow.setWindowFlags(QtCore.Qt.Widget)# 取消置顶
         MainWindow.show()
-        ui.statusbar.showMessage('窗口置顶 已取消')
+        ui.statusbar.showMessage('窗口置顶 已取消',5000)
         MainWindow.setWindowTitle(_translate("MainWindow", "可可 OCR"))
     else:
         MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint) # 打开置顶
         MainWindow.show()
         MainWindow.setWindowTitle(_translate("MainWindow", "可可 OCR - 置顶模式"))
-        ui.statusbar.showMessage('窗口置顶 已启动')
+        ui.statusbar.showMessage('窗口置顶 已启动',5000)
 def activeAutoCatch():
     if ui.autoCatch.isChecked():
-        ui.statusbar.showMessage('自动捕获模式 已启动')
+        ui.statusbar.showMessage('自动捕获模式 已启动',5000)
         ui.autoMBtn.setChecked(1)
         ui.autoCatch.setChecked(1)
 
     else:
-        ui.statusbar.showMessage('自动捕获模式 已关闭')
+        ui.statusbar.showMessage('自动捕获模式 已关闭',5000)
         ui.autoMBtn.setChecked(0)
         ui.autoCatch.setChecked(0)
     pass
 def activeMAutoCatch():
     if  ui.autoMBtn.isChecked():
-        ui.statusbar.showMessage('自动捕获模式 已启动')
+        ui.statusbar.showMessage('自动捕获模式 已启动',5000)
         ui.autoCatch.setChecked(1)
 
     else:
-        ui.statusbar.showMessage('自动捕获模式 已关闭')
+        ui.statusbar.showMessage('自动捕获模式 已关闭',5000)
         ui.autoCatch.setChecked(0)
     pass
 
@@ -340,7 +341,7 @@ def fontAddAction():
     font.setPointSize(fontSize) 
     ui.rawText.setFont(font)
     ui.transText.setFont(font)
-    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}')
+    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}',5000)
 
 def fontDecAction():
     global fontSize
@@ -351,10 +352,60 @@ def fontDecAction():
     font.setPointSize(fontSize) 
     ui.rawText.setFont(font)
     ui.transText.setFont(font)
-    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}')
+    ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}',5000)
 def printVer():
     ver=0.5
-    ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}')
+    ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}',5000)
+class ProWIn():
+    def __init__(self):
+        self.subWin=QDialog()
+        self.subWin.setWindowTitle('Pro Mode')
+        self.setUi()
+        self.subWin.exec()
+
+    def setUi(self):
+        self.closeBtn=QPushButton('关闭')
+        self.closeBtn.clicked.connect(self.close)
+
+        self.okBtn=QPushButton('确定')        
+        self.okBtn.clicked.connect(self.ok)     
+
+        self.addRexText=QtWidgets.QLineEdit()  
+
+        self.subWin.resize(280,120)
+
+        self.gridLayout=QtWidgets.QGridLayout(self.subWin)
+        
+        self.addRexText=QtWidgets.QLineEdit()
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.addRexText.setFont(font)
+        self.okBtn.setFont(font)
+        self.closeBtn.setFont(font)
+        global addRex
+        self.addRexText.setText(addRex)
+        self.gridLayout.addWidget(self.addRexText,0,0,1,2)
+        self.gridLayout.addWidget(self.okBtn,1,0,1,1)
+        self.gridLayout.addWidget(self.closeBtn,1,1,1,1)
+
+
+
+        
+        
+    def close(self):
+        self.subWin.close()
+    def ok(self):
+        # print('ok')
+        global addRex
+        addRex=self.addRexText.text()
+        print(addRex)
+        pass
+
+
+def proMode():
+    subWIn=ProWIn()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -362,13 +413,18 @@ if __name__ == '__main__':
     ui = window.Ui_MainWindow()
     ui.setupUi(MainWindow)
     # ui.pushButton.clicked.connect(partial(convert,ui))
+    icon=QtGui.QIcon()
+    icon.addPixmap(QtGui.QPixmap(":/ico/开心果.png"))
+    app.setWindowIcon(icon)
+
     cp=app.clipboard()
     cp.dataChanged.connect(runAutoCatch)
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
-    global autoBing,defBing,topBing,fontSize,runTimes
+    global autoBing,defBing,topBing,fontSize,runTimes,addRex
     autoBing,defBing,topBing=False,False,False
     fontSize,runTimes=14,0
+    addRex=''
     preLoad()
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
@@ -387,6 +443,7 @@ if __name__ == '__main__':
     ui.verBtn.triggered.connect(printVer)
     ui.autoMBtn.clicked.connect(activeMAutoCatch)
     ui.oneMBtn.clicked.connect(onePress)
+    ui.proAction.triggered.connect(proMode)
 
 
     MainWindow.show()
