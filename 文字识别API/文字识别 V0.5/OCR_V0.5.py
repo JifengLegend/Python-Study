@@ -153,6 +153,47 @@ def Trans(raw='apple',to_lang='zh',from_lang='auto',\
     finally:
         if httpClient:
             httpClient.close()
+def getLanguage(raw='apple',\
+    app_id='20200406000412945',secret_Key = 'pZCsP6EUTkXG0lLwOYAS',\
+       ):
+    '''
+    返回一个翻译后的字符串\n
+    raw:原文本\n
+    to_lang:目标翻译语言，默认为 翻译为中文\n
+    from_lang:指定原文本语言，默认为 自动检测\n
+    appid/key:我本人的账号密码\n
+    '''
+
+    appid = app_id # appid
+    secretKey = secret_Key  # 密码
+
+    httpClient = None
+    myurl = '/api/trans/vip/language'
+
+
+    salt = random.randint(32768, 65536)
+    q= raw
+    sign = appid + q + str(salt) + secretKey
+    sign = hashlib.md5(sign.encode()).hexdigest()
+    myurl = myurl + '?appid=' + appid + '&q=' + urllib.parse.quote(q) + '&salt=' + str(
+    salt) + '&sign=' + sign
+
+    try:
+        httpClient = http.client.HTTPConnection('api.fanyi.baidu.com')
+        httpClient.request('GET', myurl)
+
+        # response是HTTPResponse对象
+        response = httpClient.getresponse()
+        result_all = response.read().decode("utf-8")
+        result = json.loads(result_all)
+
+        return result['data']['src']
+    except Exception as e:
+        print (e)
+    finally:
+        if httpClient:
+            httpClient.close()
+
 def autoRun():
     if ui.autoR.isChecked()==True:
         ui.defTo.setStyleSheet('color:black;font-weight:normal;')
@@ -175,16 +216,20 @@ def autoRun():
 
 
 def autoChange():
-    global autoBing,defBing
-    autoBing=not autoBing
-    if(autoBing):
-        ui.autoTo.setText('En')
-    else:
+
+    global autoBing
+    autoBing+=1
+    if(autoBing%3==0):
+        ui.autoTo.setText('Auto')
+    elif(autoBing%3==1):
         ui.autoTo.setText('Zh')
+    else:
+        ui.autoTo.setText('En')
+    
     ui.statusbar.showMessage('当前状态为：'+search(),5000)
 
 def defChange():
-    global autoBing,defBing
+    global defBing
     defBing=not defBing
     if(defBing):
         ui.defBtn.setText('<--')
@@ -200,9 +245,12 @@ def preLoad():
     ui.statusbar.showMessage('Ready',5000)
 def search():
     strs=''
+    global autoBing
     if(ui.autoR.isChecked()==True):
         strs+='Auto To '
-        if autoBing==False:
+        if autoBing%3==0:
+            strs+='Auto'
+        elif autoBing%3==1:
             strs+='Zh'
         else:
             strs+='En'
@@ -217,13 +265,20 @@ def getType():
     cache=cache.split(' ')
     return cache[0],cache[2]
 def transMode():
+    # 判断是否开启了净化模式
     if ui.c01.checkState()==2:
         raw=ui.rawText.toPlainText()
         raw=textClean(raw)
         ui.rawText.setText(raw)
     cache=getType()
     print(cache)
-    strs=Trans(ui.rawText.toPlainText(),cache[1],cache[0],\
+    if cache[1]=='auto':
+        nowLan=getLanguage(ui.rawText.toPlainText(),
+        app_id='20201027000600376',secret_Key='5wiYK3JixYvFggKoGefp')
+        toLan='zh' if nowLan=='en' else'en'
+    else:
+        toLan=cache[1]
+    strs=Trans(ui.rawText.toPlainText(),toLan,cache[0],\
         app_id='20201027000600376',secret_Key='5wiYK3JixYvFggKoGefp'
         )
     print(strs)
@@ -231,15 +286,32 @@ def transMode():
     ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
     ui.statusbar.showMessage('翻译完成~',5000)
-def copyAction():
-    if ui.tabCtrl.currentIndex()==0:
-        ui.rawText.selectAll()
-        ui.rawText.copy()
-        ui.statusbar.showMessage('源文本已复制到剪贴板啦',5000)
+def changeCopyIco():
+    iconPaste = QtGui.QIcon()
+    iconPaste.addPixmap(QtGui.QPixmap(":/ico/粘贴 (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    iconCopy = QtGui.QIcon()
+    iconCopy.addPixmap(QtGui.QPixmap(":/ico/复制 (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+    if ui.rawText.toPlainText()=='':
+        ui.copyBtn.setIcon(iconPaste)
+        ui.copyBtn.setToolTip('粘贴')
     else:
-        ui.transText.selectAll()
-        ui.transText.copy()
-        ui.statusbar.showMessage('翻译结果已复制到剪贴板啦',5000)
+        ui.copyBtn.setIcon(iconCopy)
+        ui.copyBtn.setToolTip('复制')
+
+def copyAction():
+    if ui.rawText.toPlainText()=='':
+        ui.rawText.paste()
+    else:
+        if ui.tabCtrl.currentIndex()==0:
+            ui.rawText.selectAll()
+            ui.rawText.copy()
+            ui.statusbar.showMessage('源文本已复制到剪贴板啦',5000)
+        else:
+            ui.transText.selectAll()
+            ui.transText.copy()
+            ui.statusbar.showMessage('翻译结果已复制到剪贴板啦',5000)
+
 def delAction():
     if ui.tabCtrl.currentIndex()==0:
         ui.rawText.selectAll()
@@ -353,41 +425,47 @@ def fontDecAction():
     ui.rawText.setFont(font)
     ui.transText.setFont(font)
     ui.statusbar.showMessage(f'当前字体大小调整为：{fontSize}',5000)
-def printVer():
-    ver=0.5
-    ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}',5000)
+
 class ProWIn():
     def __init__(self):
         self.subWin=QDialog()
         self.subWin.setWindowTitle('Pro Mode')
         self.setUi()
+        self.center()
         self.subWin.exec()
+        
 
     def setUi(self):
         self.closeBtn=QPushButton('关闭')
-        self.closeBtn.clicked.connect(self.close)
 
         self.okBtn=QPushButton('确定')        
-        self.okBtn.clicked.connect(self.ok)     
+        self.groupBox = QtWidgets.QGroupBox(self.subWin)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.groupBox)
+        self.groupBox.setTitle( "请输入自定义净化规则：")
 
-        self.addRexText=QtWidgets.QLineEdit()  
+        self.addRexText=QtWidgets.QLineEdit(self.groupBox) 
+        self.horizontalLayout.addWidget(self.addRexText) 
 
         self.subWin.resize(280,120)
 
         self.gridLayout=QtWidgets.QGridLayout(self.subWin)
         
-        self.addRexText=QtWidgets.QLineEdit()
+        
+        self.addRexText.setObjectName("addRexText")
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
         font.setPointSize(12)
         self.addRexText.setFont(font)
+        self.groupBox.setFont(font)
         self.okBtn.setFont(font)
         self.closeBtn.setFont(font)
         global addRex
         self.addRexText.setText(addRex)
-        self.gridLayout.addWidget(self.addRexText,0,0,1,2)
+        self.gridLayout.addWidget(self.groupBox,0,0,1,2)
         self.gridLayout.addWidget(self.okBtn,1,0,1,1)
         self.gridLayout.addWidget(self.closeBtn,1,1,1,1)
+        self.closeBtn.clicked.connect(self.close)
+        self.okBtn.clicked.connect(self.ok)  
 
 
 
@@ -401,10 +479,61 @@ class ProWIn():
         addRex=self.addRexText.text()
         print(addRex)
         pass
+    def center(self):
+        g1=self.subWin.geometry()
+        g2=MainWindow.geometry()
+        left=(g2.width()-g1.width())/2
+        top=(g2.height()-g1.height())/2
+        print(g1,g2)
+        self.subWin.move(g2.x()+int(left),g2.y()+50)
+class DescribeWin():
+    def __init__(self,ver=0.5):
+        self.subWin=QDialog()
+        self.subWin.setWindowTitle('可可OCR 功能简介')
+        self.setUi(ver)
+        self.center()
+        self.subWin.exec()
+    def setUi(self,ver):
+        self.vBox=QtWidgets.QVBoxLayout(self.subWin)
+        self.d1=QtWidgets.QLabel(self.subWin)
+        self.d2=QtWidgets.QLabel(self.subWin)
+        self.d3=QtWidgets.QLabel(self.subWin)
+        self.closeBtn=QPushButton('关闭',self.subWin)
+        self.closeBtn.clicked.connect(self.subWin.close)        
+        self.d1.setText(f'当前版本为：V{ver}')
+        self.d2.setText(f'<b>可可</b> 是杨小可的小名儿<hr>')
+        self.d3.setText(f'他是一个语言能力很强的好孩子<p>可以帮爸爸妈妈完成：</p><p style="text-align:right"><b>文字识别</b>和<b>翻译</b></p>')
+
+        self.vBox.addWidget(self.d2)
+        self.vBox.addWidget(self.d3)
+        self.vBox.addWidget(self.d1)
+        
+        self.vBox.addWidget(self.closeBtn)
+
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+
+        self.subWin.setFont(font)
+
+        self.subWin.resize(270,320)
+    def center(self):
+        g1=self.subWin.geometry()
+        g2=MainWindow.geometry()
+        left=(g2.width()-g1.width())/2
+        top=(g2.height()-g1.height())/2
+        print(g1,g2)
+        self.subWin.move(g2.x()+int(left),g2.y()+int(top))
 
 
+
+def printVer():
+    ver=0.6
+    ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}',5000)
+    verWin=DescribeWin(ver)
 def proMode():
     subWIn=ProWIn()
+
 
 
 if __name__ == '__main__':
@@ -422,8 +551,8 @@ if __name__ == '__main__':
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
     global autoBing,defBing,topBing,fontSize,runTimes,addRex
-    autoBing,defBing,topBing=False,False,False
-    fontSize,runTimes=14,0
+    defBing,topBing=False,False
+    fontSize,runTimes,autoBing=14,0,0
     addRex=''
     preLoad()
     ui.autoBtn.clicked.connect(autoChange)
@@ -444,6 +573,7 @@ if __name__ == '__main__':
     ui.autoMBtn.clicked.connect(activeMAutoCatch)
     ui.oneMBtn.clicked.connect(onePress)
     ui.proAction.triggered.connect(proMode)
+    ui.rawText.textChanged.connect(changeCopyIco)
 
 
     MainWindow.show()
