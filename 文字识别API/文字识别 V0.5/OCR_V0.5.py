@@ -306,12 +306,19 @@ def copyAction():
     else:
         if ui.tabCtrl.currentIndex()==0:
             ui.rawText.selectAll()
-            ui.rawText.copy()
+            plainCopy(ui.rawText)
             ui.statusbar.showMessage('源文本已复制到剪贴板啦',5000)
-        else:
+        elif ui.tabCtrl.currentIndex()==1:
             ui.transText.selectAll()
-            ui.transText.copy()
+            plainCopy(ui.transText)
             ui.statusbar.showMessage('翻译结果已复制到剪贴板啦',5000)
+        else:
+            ui.vipText.selectAll()
+            plainCopy(ui.vipText)
+            ui.statusbar.showMessage('翻译结果已复制到剪贴板啦',5000)
+def plainCopy(obj):
+    cache=obj.toPlainText()
+    cp.setText(cache)
 
 def delAction():
     if ui.tabCtrl.currentIndex()==0:
@@ -534,7 +541,11 @@ def printVer():
     verWin=DescribeWin(ver)
 def proMode():
     subWIn=ProWIn()
-
+def textToVip():
+    ui.vipText.selectAll()
+    ui.vipText.clear()
+    ui.vipText.setText(ui.transText.toPlainText())
+    ui.statusbar.showMessage('VIP 文本已更新 ~ ',5000)
 
 
 if __name__ == '__main__':
@@ -575,7 +586,9 @@ if __name__ == '__main__':
     ui.oneMBtn.clicked.connect(onePress)
     ui.proAction.triggered.connect(proMode)
     ui.rawText.textChanged.connect(changeCopyIco)
+    ui.vipAction.triggered.connect(textToVip)
 
 
     MainWindow.show()
     sys.exit(app.exec_())
+    

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>349</width>
+    <width>357</width>
     <height>609</height>
    </rect>
   </property>
@@ -32,6 +32,9 @@
       </property>
       <property name="title">
        <string>执行：</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -167,7 +170,7 @@
               <string>公式识别</string>
              </property>
              <property name="shortcut">
-              <string>Ctrl+E</string>
+              <string>Ctrl+M</string>
              </property>
             </widget>
            </item>
@@ -527,8 +530,20 @@
         <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab">
        <property name="font">
@@ -623,6 +638,38 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Vip Text</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QTextEdit" name="vipText">
+          <property name="font">
+           <font>
+            <family>微软雅黑 Light</family>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+          <property name="placeholderText">
+           <string>有价值的文本会出现在这里~</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -632,7 +679,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>349</width>
+     <width>357</width>
      <height>26</height>
     </rect>
    </property>
@@ -651,6 +698,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="autoCatch"/>
     <addaction name="oneAction"/>
+    <addaction name="vipAction"/>
     <addaction name="separator"/>
     <addaction name="action_4"/>
     <addaction name="action_6"/>
@@ -756,6 +804,14 @@ p, li { white-space: pre-wrap; }
   <action name="proAction">
    <property name="text">
     <string>Pro Mode</string>
+   </property>
+  </action>
+  <action name="vipAction">
+   <property name="text">
+    <string>添加到 Vip</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>
