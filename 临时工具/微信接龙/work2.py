@@ -81,7 +81,7 @@ if __name__ == "__main__":
         # 转发文件
         # getPosition(70,698)
         # pyautogui.click()
-        # getPosition(0.5,313)
+        # getPosition(0.5,31 3)
         # pyautogui.click()
         # pyautogui.click(847,329)
         # typeWords('233')

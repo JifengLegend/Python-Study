@@ -104,6 +104,7 @@ def textClean(strs):
     else:
         strs=re.sub(addRex,'\n',strs)
     strs=re.sub(r'(?<!\.|。)\n(?![A-Z])',' ',strs)
+    # strs=re.sub(r'\n([A-Z]{1,2}[ \.。]?)',' \1',strs)
     return strs
 def Trans(raw='apple',to_lang='zh',from_lang='auto',\
     app_id='20200406000412945',secret_Key = 'pZCsP6EUTkXG0lLwOYAS',\
@@ -355,7 +356,7 @@ def onePress():
     print(strs)
     ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
-    ui.statusbar.showMessage('翻译完成~',5000,5000)
+    ui.statusbar.showMessage('翻译完成~',5000)
 
     ui.statusbar.showMessage('一键翻译 已完成',5000)
 def onTop():
