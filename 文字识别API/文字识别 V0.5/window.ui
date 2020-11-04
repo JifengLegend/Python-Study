@@ -694,6 +694,7 @@ p, li { white-space: pre-wrap; }
      <string>文本</string>
     </property>
     <addaction name="action"/>
+    <addaction name="autoCopyAction"/>
     <addaction name="action_2"/>
     <addaction name="separator"/>
     <addaction name="autoCatch"/>
@@ -812,6 +813,20 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="autoCopyAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>复制+</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
  </widget>

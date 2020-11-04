@@ -70,7 +70,12 @@ def mathMode():
     mathPure=re.sub(' ','',r['latex_simplified'])
     print(mathPure)
     ui.rawText.setText(mathPure)
-    ui.statusbar.showMessage('ready',5000)
+    ui.tabCtrl.setCurrentIndex(0)
+    ui.statusbar.showMessage('公式识别已完成',5000)
+    if ui.autoCopyAction.isChecked():
+        ui.rawText.selectAll()
+        plainCopy(ui.rawText)
+        ui.statusbar.showMessage('公式识别已完成，结果已复制',5000)    
 def gen():
     if ui.c02.checkState()==2:
         mathMode()
@@ -97,6 +102,11 @@ def genMode():
         print(text)
         ui.tabCtrl.setCurrentIndex(0)
         ui.rawText.setText(text)
+        if ui.autoCopyAction.isChecked():
+            ui.rawText.selectAll()
+            plainCopy(ui.rawText)
+            ui.statusbar.showMessage('文字识别已完成，结果已复制',5000)    
+
 def textClean(strs):
     global addRex
     if addRex=='':
@@ -287,6 +297,16 @@ def transMode():
     ui.transText.setText(strs)
     ui.tabCtrl.setCurrentIndex(1)
     ui.statusbar.showMessage('翻译完成~',5000)
+    # if ui.autoCopyAction.isChecked():
+    #     ui.transText.selectAll()
+    #     plainCopy(ui.transText)
+    #     ui.statusbar.showMessage('翻译完成~,结果已复制到剪贴板',5000)
+def transModePlusCopy():
+    transMode()
+    autoCopyPure('翻译完成')
+def onePressPlusCopy():
+    onePress()
+    autoCopyPure('一键翻译完成')
 def changeCopyIco():
     iconPaste = QtGui.QIcon()
     iconPaste.addPixmap(QtGui.QPixmap(":/ico/粘贴 (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -352,20 +372,7 @@ def onePress():
     ui.rawText.clear()
     ui.rawText.paste()
 
-    if ui.c01.checkState()==2:
-        raw=ui.rawText.toPlainText()
-        raw=textClean(raw)
-        ui.rawText.setText(raw)
-    cache=getType()
-    print(cache)
-    strs=Trans(ui.rawText.toPlainText(),cache[1],cache[0],\
-        app_id='20201027000600376',secret_Key='5wiYK3JixYvFggKoGefp')
-    print(strs)
-    ui.transText.setText(strs)
-    ui.tabCtrl.setCurrentIndex(1)
-    ui.statusbar.showMessage('翻译完成~',5000)
-
-    ui.statusbar.showMessage('一键翻译 已完成',5000)
+    transMode()
 def onTop():
 
     _translate = QtCore.QCoreApplication.translate
@@ -402,16 +409,19 @@ def activeMAutoCatch():
 
 def runAutoCatch():
     global runTimes
+    time.sleep(0.1)
     if cp.text()==ui.transText.toPlainText():
         print('检测到刚复制的内容为刚才的翻译结果，跳过')
         pass
     else:        
         if runTimes%2==0:
             if ui.autoCatch.isChecked():
-                onePress()        
+                onePress()     
+                 
             else:
                 pass
     runTimes+=1
+    # autoCopyPure('自动捕获已完成')  
 
 def fontAddAction():
     global fontSize
@@ -440,6 +450,8 @@ class ProWIn():
         self.subWin.setWindowTitle('Pro Mode')
         self.setUi()
         self.center()
+        self.subWin.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.subWin.show()
         self.subWin.exec()
         
 
@@ -486,6 +498,8 @@ class ProWIn():
         global addRex
         addRex=self.addRexText.text()
         print(addRex)
+        self.subWin.close()
+        ui.statusbar.showMessage('已成功添加自定义净化规则',5000)
         pass
     def center(self):
         g1=self.subWin.geometry()
@@ -546,6 +560,15 @@ def textToVip():
     ui.vipText.clear()
     ui.vipText.setText(ui.transText.toPlainText())
     ui.statusbar.showMessage('VIP 文本已更新 ~ ',5000)
+def autoCopyMes():
+    if ui.autoCopyAction.isChecked():
+        ui.statusbar.showMessage('✔ 自动复制已打开',5000)
+    else:
+        ui.statusbar.showMessage('✖ 自动复制已关闭',5000)
+def autoCopyPure(strs):
+    if ui.autoCopyAction.isChecked():
+        copyAction()
+        ui.statusbar.showMessage(f'{strs},结果已复制到剪贴板',5000)
 
 
 if __name__ == '__main__':
@@ -569,25 +592,25 @@ if __name__ == '__main__':
     preLoad()
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
-    ui.transBtn.clicked.connect(transMode)
+    ui.transBtn.clicked.connect(transModePlusCopy)
     ui.copyBtn.clicked.connect(copyAction)
     ui.delBtn.clicked.connect(delAction)
     ui.c02.toggled.connect(regMes)
     ui.c02.toggled.connect(mathMes)
     # QShortcut(QtGui.QKeySequence(MainWindow.tr('Ctrl+B')),MainWindow,onePress)
     # QShortcut(QtGui.QKeySequence(MainWindow.tr('Ctrl+Q')),MainWindow,onTop)
-    ui.oneAction.triggered.connect(onePress)
+    ui.oneAction.triggered.connect(onePressPlusCopy)
     ui.topAction.triggered.connect(onTop)
     ui.fontAdd.triggered.connect(fontAddAction)
     ui.fontDec.triggered.connect(fontDecAction)
     ui.autoCatch.triggered.connect(activeAutoCatch)
     ui.verBtn.triggered.connect(printVer)
     ui.autoMBtn.clicked.connect(activeMAutoCatch)
-    ui.oneMBtn.clicked.connect(onePress)
+    ui.oneMBtn.clicked.connect(onePressPlusCopy)
     ui.proAction.triggered.connect(proMode)
     ui.rawText.textChanged.connect(changeCopyIco)
     ui.vipAction.triggered.connect(textToVip)
-
+    ui.autoCopyAction.triggered.connect(autoCopyMes)
 
     MainWindow.show()
     sys.exit(app.exec_())
