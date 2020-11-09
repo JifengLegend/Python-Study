@@ -101,7 +101,8 @@ def genMode():
 
         print(text)
         ui.tabCtrl.setCurrentIndex(0)
-        ui.rawText.setText(text)
+        ui.rawText.setPlainText(text)
+        # ui.rawText.setText(text)
         if ui.autoCopyAction.isChecked():
             ui.rawText.selectAll()
             plainCopy(ui.rawText)
