@@ -81,6 +81,8 @@ def gen():
         mathMode()
     else:
         genMode()
+        if ui.genPTrans.isChecked():
+            transMode()
 def genMode():
     pre()
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
@@ -254,6 +256,7 @@ def preLoad():
     ui.autoR.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.tabCtrl.setCurrentIndex(0)
     ui.statusbar.showMessage('Ready',5000)
+    ui.genBtn.setText('识别+翻译')
 def search():
     strs=''
     global autoBing
@@ -408,20 +411,25 @@ def activeMAutoCatch():
     pass
 
 def runAutoCatch():
-    global runTimes
-    time.sleep(0.1)
-    if cp.text()==ui.transText.toPlainText():
-        print('检测到刚复制的内容为刚才的翻译结果，跳过')
-        pass
-    else:        
-        if runTimes%2==0:
-            if ui.autoCatch.isChecked():
-                onePress()     
-                 
-            else:
-                pass
-    runTimes+=1
-    # autoCopyPure('自动捕获已完成')  
+    if ui.autoCatch.isChecked():
+        global runTimes
+        print(f'检测到剪贴板变动：{cp.text()[0:25]}')
+        rawDoc=ui.transText.toPlainText()
+
+        if cp.text()==rawDoc:
+            print('检测到刚复制的内容为刚才的翻译结果，跳过')
+            pass
+        else:        
+            if runTimes%2==0:
+                if ui.autoCatch.isChecked():
+                    onePress()                      
+                else:
+                    pass
+        runTimes+=1
+        if ui.transText.toPlainText()==rawDoc:
+            print('本次自动监听切换为手动模式')
+            onePress()
+        # autoCopyPure('自动捕获已完成')  
 
 def fontAddAction():
     global fontSize
@@ -569,6 +577,13 @@ def autoCopyPure(strs):
     if ui.autoCopyAction.isChecked():
         copyAction()
         ui.statusbar.showMessage(f'{strs},结果已复制到剪贴板',5000)
+def activeGenPTrans():
+    if not ui.genPTrans.isChecked():
+        ui.genBtn.setText('文字识别')
+        ui.statusbar.showMessage('切换为 文字识别 模式',5000)
+    else:
+        ui.genBtn.setText('识别+翻译')
+        ui.statusbar.showMessage('切换为 文字识别+翻译 模式',5000)
 
 
 if __name__ == '__main__':
@@ -611,7 +626,7 @@ if __name__ == '__main__':
     ui.rawText.textChanged.connect(changeCopyIco)
     ui.vipAction.triggered.connect(textToVip)
     ui.autoCopyAction.triggered.connect(autoCopyMes)
-
+    ui.genPTrans.triggered.connect(activeGenPTrans)
     MainWindow.show()
     sys.exit(app.exec_())
     
