@@ -131,6 +131,8 @@ if __name__ == "__main__":
         getPosition(0.5,705)
         pyautogui.click()
 
+        time.sleep(2)
+
         # 转发
         getPosition(0.5,226)
         pyautogui.click()

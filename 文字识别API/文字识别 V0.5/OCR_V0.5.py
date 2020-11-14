@@ -411,25 +411,15 @@ def activeMAutoCatch():
     pass
 
 def runAutoCatch():
+    global tList
     if ui.autoCatch.isChecked():
-        global runTimes
-        print(f'检测到剪贴板变动：{cp.text()[0:25]}')
-        rawDoc=ui.transText.toPlainText()
-
-        if cp.text()==rawDoc:
-            print('检测到刚复制的内容为刚才的翻译结果，跳过')
-            pass
-        else:        
-            if runTimes%2==0:
-                if ui.autoCatch.isChecked():
-                    onePress()                      
-                else:
-                    pass
-        runTimes+=1
-        if ui.transText.toPlainText()==rawDoc:
-            print('本次自动监听切换为手动模式')
-            onePress()
-        # autoCopyPure('自动捕获已完成')  
+        if tList.read()!=cp.text():
+            tList.append(cp.text())
+            if cp.text()==ui.transText.toPlainText():
+                print('检测到刚复制的内容为刚才的翻译结果，跳过')
+                pass
+            else:
+                onePress()
 
 def fontAddAction():
     global fontSize
@@ -554,11 +544,19 @@ class DescribeWin():
         top=(g2.height()-g1.height())/2
         print(g1,g2)
         self.subWin.move(g2.x()+int(left),g2.y()+int(top))
-
+class TextCache:
+    def __init__(self):
+        self.tlist=['','','']
+    def append(self,strs):
+        if self.tlist[-1]!=strs:
+            self.tlist.append(strs)
+            del self.tlist[0]
+    def read(self):
+        return self.tlist[-1]
 
 
 def printVer():
-    ver=0.6
+    ver=0.62
     ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}',5000)
     verWin=DescribeWin(ver)
 def proMode():
@@ -600,11 +598,13 @@ if __name__ == '__main__':
     cp.dataChanged.connect(runAutoCatch)
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
-    global autoBing,defBing,topBing,fontSize,runTimes,addRex
+    global autoBing,defBing,topBing,fontSize,runTimes,addRex,tList
     defBing,topBing=False,False
     fontSize,runTimes,autoBing=14,0,0
     addRex=''
+    tList=TextCache()
     preLoad()
+
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
     ui.transBtn.clicked.connect(transModePlusCopy)
