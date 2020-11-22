@@ -81,6 +81,8 @@ def gen():
         mathMode()
     else:
         genMode()
+        if ui.genPTrans.isChecked():
+            transMode()
 def genMode():
     pre()
     request_url = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
@@ -255,6 +257,7 @@ def preLoad():
     ui.autoR.setStyleSheet('color:#1884d9;font-weight:700;')
     ui.tabCtrl.setCurrentIndex(0)
     ui.statusbar.showMessage('Ready',5000)
+    ui.genBtn.setText('识别+翻译')
 def search():
     strs=''
     global autoBing
@@ -409,20 +412,15 @@ def activeMAutoCatch():
     pass
 
 def runAutoCatch():
-    global runTimes
-    time.sleep(0.1)
-    if cp.text()==ui.transText.toPlainText():
-        print('检测到刚复制的内容为刚才的翻译结果，跳过')
-        pass
-    else:        
-        if runTimes%2==0:
-            if ui.autoCatch.isChecked():
-                onePress()     
-                 
-            else:
+    global tList
+    if ui.autoCatch.isChecked():
+        if tList.read()!=cp.text():
+            tList.append(cp.text())
+            if cp.text()==ui.transText.toPlainText():
+                print('检测到刚复制的内容为刚才的翻译结果，跳过')
                 pass
-    runTimes+=1
-    # autoCopyPure('自动捕获已完成')  
+            else:
+                onePress()
 
 def fontAddAction():
     global fontSize
@@ -547,11 +545,19 @@ class DescribeWin():
         top=(g2.height()-g1.height())/2
         print(g1,g2)
         self.subWin.move(g2.x()+int(left),g2.y()+int(top))
-
+class TextCache:
+    def __init__(self):
+        self.tlist=['','','']
+    def append(self,strs):
+        if self.tlist[-1]!=strs:
+            self.tlist.append(strs)
+            del self.tlist[0]
+    def read(self):
+        return self.tlist[-1]
 
 
 def printVer():
-    ver=0.6
+    ver=0.62
     ui.statusbar.showMessage(f'当前`可可 OCR`的版本为 V{ver}',5000)
     verWin=DescribeWin(ver)
 def proMode():
@@ -570,6 +576,13 @@ def autoCopyPure(strs):
     if ui.autoCopyAction.isChecked():
         copyAction()
         ui.statusbar.showMessage(f'{strs},结果已复制到剪贴板',5000)
+def activeGenPTrans():
+    if not ui.genPTrans.isChecked():
+        ui.genBtn.setText('文字识别')
+        ui.statusbar.showMessage('切换为 文字识别 模式',5000)
+    else:
+        ui.genBtn.setText('识别+翻译')
+        ui.statusbar.showMessage('切换为 文字识别+翻译 模式',5000)
 
 
 if __name__ == '__main__':
@@ -586,11 +599,13 @@ if __name__ == '__main__':
     cp.dataChanged.connect(runAutoCatch)
     ui.genBtn.clicked.connect(gen)
     ui.autoR.toggled.connect(autoRun)
-    global autoBing,defBing,topBing,fontSize,runTimes,addRex
+    global autoBing,defBing,topBing,fontSize,runTimes,addRex,tList
     defBing,topBing=False,False
     fontSize,runTimes,autoBing=14,0,0
     addRex=''
+    tList=TextCache()
     preLoad()
+
     ui.autoBtn.clicked.connect(autoChange)
     ui.defBtn.clicked.connect(defChange)
     ui.transBtn.clicked.connect(transModePlusCopy)
@@ -612,7 +627,7 @@ if __name__ == '__main__':
     ui.rawText.textChanged.connect(changeCopyIco)
     ui.vipAction.triggered.connect(textToVip)
     ui.autoCopyAction.triggered.connect(autoCopyMes)
-
+    ui.genPTrans.triggered.connect(activeGenPTrans)
     MainWindow.show()
     sys.exit(app.exec_())
     

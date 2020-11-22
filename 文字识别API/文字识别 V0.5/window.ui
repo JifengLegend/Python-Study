@@ -699,6 +699,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="autoCatch"/>
     <addaction name="oneAction"/>
+    <addaction name="genPTrans"/>
     <addaction name="vipAction"/>
     <addaction name="separator"/>
     <addaction name="action_4"/>
@@ -827,6 +828,20 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="genPTrans">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>识别+翻译</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>
