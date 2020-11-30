@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
         # 选中自己
         getPosition(0.5,0.59)
-        pyautogui.scroll(-800)
+        pyautogui.scroll(-900)
         try:
             pocache=pyautogui.locateOnScreen('target2.png',region=(tarWin.topleft.x,tarWin.topleft.y,tarWin.size.width,tarWin.size.height))
             bx,by=pyautogui.center(pocache)
@@ -99,8 +99,10 @@ if __name__ == "__main__":
             pyautogui.moveTo(bx+300,by,duration=1)
             # getPosition(bx-tarPos[0]+310,by-tarPos[1])
         except TypeError:
+            time.sleep(0.2)
             pyautogui.scroll(1600)
-            pyautogui.scroll(-800)
+            time.sleep(0.2)
+            pyautogui.scroll(-900)
             pocache=pyautogui.locateOnScreen('target2.png',region=(tarWin.topleft.x,tarWin.topleft.y,tarWin.size.width,tarWin.size.height))
             bx,by=pyautogui.center(pocache)
             print(bx,by)
