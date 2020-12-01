@@ -1,4 +1,4 @@
-class system:
+class System:
     def __init__(self):
         self.addParts()
         self.addEnvironments()
@@ -17,17 +17,17 @@ class system:
 
 class Part:
     def __init__(self):
+        self.addPara()
+    def addPara(self):
         self.P00='结构'
-        pass
     def M00(self):
         pass
 
-class FA:
+class FA(System):
     def __init__(self):
         self.addParts()
         self.addEnvironments()
-        self.E00()        
-        pass
+        self.E00()
     def addParts(self):
         '为系统添加 部件'
         QA,QB=Part(),Part()
