@@ -65,7 +65,7 @@ def RegexStart():
     nums=[]
     
     for eachline in dataCache:
-
+        a=''
         num=0
         try:
             a=re.search(r'^\s+\w',eachline).group()

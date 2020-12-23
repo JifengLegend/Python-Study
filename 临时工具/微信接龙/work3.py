@@ -114,37 +114,37 @@ if __name__ == "__main__":
 
         # 填写信息
 
-        getPosition(0.5,209)
+        getPosition(0.5,279)
         typeWords('vhjnhk')
         pyautogui.press('space')
         
-        getPosition(0.5,287)
+        getPosition(0.5,368)
         typeWords(getTem())
 
-        getPosition(0.5,369)
+        getPosition(0.5,472)
         typeWords(getTem())
 
-        getPosition(0.5,445)
+        getPosition(0.5,565)
         typeWords(getTem())
 
-        getPosition(0.5,515)
+        getPosition(0.5,652)
         pyautogui.click()
 
-        getPosition(0.5,705)
+        getPosition(0.5,885)
         pyautogui.click()
 
         time.sleep(2)
 
         # 转发
-        getPosition(0.5,226)
+        getPosition(0.5,289)
         pyautogui.click()
 
-        getPosition(70,698)
+        getPosition(70,891)
         pyautogui.click()
 
         time.sleep(2)
         getPosition(0.5,237)
         pyautogui.click()
-        pyautogui.click(847,329)
+        pyautogui.click(894,279)
         typeWords('4')
-        pyautogui.click(822,743)
+        pyautogui.click(894,776)
