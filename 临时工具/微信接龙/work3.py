@@ -143,7 +143,7 @@ if __name__ == "__main__":
         pyautogui.click()
 
         time.sleep(2)
-        getPosition(0.5,237)
+        getPosition(0.5,292)
         pyautogui.click()
         pyautogui.click(894,279)
         typeWords('4')

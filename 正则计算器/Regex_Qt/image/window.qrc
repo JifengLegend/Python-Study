@@ -1,0 +1,19 @@
+<RCC>
+  <qresource prefix="image">
+    <file>cake.ico</file>
+    <file>scanning.png</file>
+    <file>处理1.png</file>
+    <file>翻译.png</file>
+    <file>复制 (1).png</file>
+    <file>复制.png</file>
+    <file>公式.png</file>
+    <file>箭头右.png</file>
+    <file>卷蛋糕.png</file>
+    <file>开心果.png</file>
+    <file>删除 (2).png</file>
+    <file>心2.ico</file>
+    <file>信号 (1).png</file>
+    <file>信号.png</file>
+    <file>粘贴 (1).png</file>
+  </qresource>
+</RCC>
