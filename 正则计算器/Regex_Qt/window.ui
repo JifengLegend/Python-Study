@@ -25,6 +25,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -326,7 +329,7 @@ background-color:rgb(85, 170, 255)</string>
      <x>0</x>
      <y>0</y>
      <width>405</width>
-     <height>30</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -342,8 +345,19 @@ background-color:rgb(85, 170, 255)</string>
     <property name="title">
      <string>关于</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="aboutAction"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>操作</string>
+    </property>
+    <addaction name="saveAction"/>
+    <addaction name="separator"/>
+    <addaction name="preAction1"/>
+    <addaction name="preAction2"/>
+    <addaction name="preAction3"/>
+   </widget>
+   <addaction name="menu_3"/>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
   </widget>
@@ -359,7 +373,7 @@ background-color:rgb(85, 170, 255)</string>
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="action">
+  <action name="aboutAction">
    <property name="text">
     <string>说明</string>
    </property>
@@ -378,6 +392,38 @@ background-color:rgb(85, 170, 255)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="saveAction">
+   <property name="text">
+    <string>保存</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="preAction1">
+   <property name="text">
+    <string>预设1</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="preAction2">
+   <property name="text">
+    <string>预设2</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="preAction3">
+   <property name="text">
+    <string>预设3</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>

@@ -1,0 +1,24 @@
+[
+  { "name": "", "match": "第(\\d+)章", "replace": "第$1卷" },
+  { "name": "Nothing", "match": "; *% *", "replace": "- " },
+  { "name": "Nothing", "match": "=", "replace": "\\t" },
+  { "name": "Nothing", "match": "- ", "replace": "" },
+  { "name": "Nothing", "match": "^(....)", "replace": "\"$1\"," },
+  {
+    "name": "去除多余换行（英文）",
+    "match": "(?<!\\.)\\n(?![A-Z])",
+    "replace": ""
+  },
+  { "name": "Nothing", "match": "\\d+\\.(\\d+\\. (\\d+\\.)*)*", "replace": "" },
+  { "name": "补充分段", "match": "(\\d)", "replace": "\\n$1-" },
+  { "name": "Nothing", "match": "(C)", "replace": "\\n$1" },
+  { "name": "Nothing", "match": "([A-Z]) ", "replace": "$1\\t" },
+  { "name": "Nothing", "match": "//", "replace": "" },
+  { "name": "Nothing", "match": "、、、", "replace": "" },
+  { "name": "Nothing", "match": "\\t", "replace": "\\n\\t" },
+  { "name": "Nothing", "match": "\\kappa", "replace": "k" },
+  { "name": "Nothing", "match": "(?<!\\.)\\n(?![A-Z])", "replace": "" },
+  { "name": "Nothing", "match": "(?<!\\.|。)\\n(?![A-Z])", "replace": "" },
+  { "name": "Nothing", "match": "(?<!\\.|。)\\n(?![A-Z])", "replace": "" },
+  { "name": "Nothing", "match": "111", "replace": "" }
+]
