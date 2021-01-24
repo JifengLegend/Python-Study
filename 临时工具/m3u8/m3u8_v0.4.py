@@ -15,8 +15,9 @@ class Mfile:
                 self.getTsfile()
             else:
                 self.easyTsfile()
-
+    
     def reLink(self):
+        # 进行重定向，将m3u8中的地址更改为当前ts文件的地址
         self.fileName=re.sub(' .*\.','.',self.mfileName)
         self.outName=self.fileName[:-4]+'mp4'
         newMfileName=self.fileName[:-5]+'N.m3u8'
@@ -34,13 +35,17 @@ class Mfile:
                 with open(self.newMFile,'w',encoding='utf-8')as fn:
                     fn.write(strChange)
                     print(f'重定向的m文件已创建{newMfileName}')
+    
     def getLinks(self):
+        # 把ts文件写入self.tsLists
         m_obj=m3u8.load(self.newMFile)
         self.tsLists=[]
         for i,seg in enumerate(m_obj.segments):
             self.tsLists.append(seg.uri)
         print(self.tsLists)
+    
     def getTsfile(self):
+        # 解密方式合成
         for tsLink in self.tsLists:
             tsName=tsLink.split("/")[-1]+'.ts'
             if path.exists(tsLink):
@@ -55,7 +60,9 @@ class Mfile:
             else:
                 print(f'找不到链接,{self.outName} 视频生成已终止')
                 break
+    
     def easyTsfile(self):
+        # 普通方式合成
         for tsLink in self.tsLists:
             tsName=tsLink.split("/")[-1]+'.ts'
             if path.exists(tsLink):
@@ -97,6 +104,7 @@ if __name__ == "__main__":
     mfilesPath=path.join(realPath,'mfiles')
     VideosPath=path.join(realPath,'Videos')
     # print(mfilesPath,VideosPath)
+    
     mflists=glob('*.m3u8')
     for mfileName in mflists:
         mfileNow=Mfile(mfileName)
