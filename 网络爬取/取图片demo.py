@@ -1,6 +1,10 @@
 import urllib.request   
 import re
 import os
+def chRec():
+    absPath=__file__ 
+    recPath=absPath[:absPath.rfind("\\")]
+    os.chdir(recPath)
 #打开网页链接
 def openWeb(urlin):
     #获取链接请求
@@ -21,14 +25,15 @@ def decodeWeb(htmlbyte):
 
 
 #创建保存目录
-#os.mkdir('imgcache')
+# os.mkdir('imgcache')
 #保存文件
 def saveImg(title,src):
     title='./imgcache/'+title+'.jpg'
     with open(title,'wb')as f:
         f.write(src)
 
-
+def getDirect():
+    
 
 
 
@@ -38,11 +43,13 @@ def saveImg(title,src):
 
 
 if __name__ == "__main__":
+    chRec()
     urlin='https://588ku.com/sheyingtu/0-82-default-0-1/?hd=85'
     urlin1='http://placekitten.com/g/500/600'
     urlin2='http://bpic.588ku.com/back_list_pic/19/10/22/0be968e6d311a49e4abeabc43ca0e111.jpg!/fh/300/quality/90/unsharp/true/compress/true'
+    urlin3='https://mp.weixin.qq.com/cgi-bin/getimgdata?token=928669827&msgid=500000031&mode=small&source=&fileId=0&ow=-1'
     
-    webtext=openWeb(urlin)
+    webtext=openWeb(urlin3)
     webtext=decodeWeb(webtext)
     matchtext=re.finditer(r'class="lazy".*?</div>',webtext)
     for each in matchtext:
@@ -54,6 +61,7 @@ if __name__ == "__main__":
         print(title)
         print(src)
         src=openWeb(src)
+        os.mkdir('imgcache')
         saveImg(title,src)
     # saveImg('cat',webtext)
 
